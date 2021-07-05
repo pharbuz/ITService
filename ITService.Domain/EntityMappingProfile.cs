@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
-using ITService.Domain.Command.Contact;
+using ITService.Domain.Command.Category;
+using ITService.Domain.Command.Employee;
 using ITService.Domain.Command.Order;
+using ITService.Domain.Command.OrderDetail;
+using ITService.Domain.Command.Product;
 using ITService.Domain.Command.Role;
-using ITService.Domain.Command.Todo;
+using ITService.Domain.Command.Service;
 using ITService.Domain.Command.User;
 using ITService.Domain.Entities;
 using ITService.Domain.Query.Dto;
@@ -11,15 +14,26 @@ namespace ITService.Domain
 {
     public class EntityMappingProfile : Profile
     {
-        public void CreateMapForContact()
+        public void CreateMapForCategory()
         {
-            CreateMap<Contact, ContactDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
 
-            CreateMap<Contact, AddContactCommand>().ReverseMap();
-            CreateMap<ContactDto, AddContactCommand>().ReverseMap();
+            CreateMap<Category, AddCategoryCommand>().ReverseMap();
+            CreateMap<CategoryDto, AddCategoryCommand>().ReverseMap();
 
-            CreateMap<Contact, EditContactCommand>().ReverseMap();
-            CreateMap<ContactDto, EditContactCommand>().ReverseMap();
+            CreateMap<Category, EditCategoryCommand>().ReverseMap();
+            CreateMap<CategoryDto, EditCategoryCommand>().ReverseMap();
+        }
+
+        public void CreateMapForEmployee()
+        {
+            CreateMap<Employee, EmployeeDto>().ReverseMap();
+
+            CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
+            CreateMap<EmployeeDto, AddEmployeeCommand>().ReverseMap();
+
+            CreateMap<Employee, EditEmployeeCommand>().ReverseMap();
+            CreateMap<EmployeeDto, EditEmployeeCommand>().ReverseMap();
         }
 
         public void CreateMapForOrder()
@@ -33,6 +47,28 @@ namespace ITService.Domain
             CreateMap<OrderDto, EditOrderCommand>().ReverseMap();
         }
 
+        public void CreateMapForOrderDetail()
+        {
+            CreateMap<OrderDetail, OrderDetailDto>().ReverseMap();
+
+            CreateMap<OrderDetail, AddOrderDetailCommand>().ReverseMap();
+            CreateMap<OrderDetailDto, AddOrderDetailCommand>().ReverseMap();
+
+            CreateMap<OrderDetail, EditOrderDetailCommand>().ReverseMap();
+            CreateMap<OrderDetailDto, EditOrderDetailCommand>().ReverseMap();
+        }
+
+        public void CreateMapForProduct()
+        {
+            CreateMap<Product, ProductDto>().ReverseMap();
+
+            CreateMap<Product, AddProductCommand>().ReverseMap();
+            CreateMap<ProductDto, AddProductCommand>().ReverseMap();
+
+            CreateMap<Product, EditProductCommand>().ReverseMap();
+            CreateMap<ProductDto, EditProductCommand>().ReverseMap();
+        }
+
         public void CreateMapForRole()
         {
             CreateMap<Role, RoleDto>().ReverseMap();
@@ -44,15 +80,15 @@ namespace ITService.Domain
             CreateMap<RoleDto, EditRoleCommand>().ReverseMap();
         }
 
-        public void CreateMapForTodo()
+        public void CreateMapForService()
         {
-            CreateMap<Todo, TodoDto>().ReverseMap();
+            CreateMap<Service, ServiceDto>().ReverseMap();
 
-            CreateMap<Todo, AddTodoCommand>().ReverseMap();
-            CreateMap<TodoDto, AddTodoCommand>().ReverseMap();
+            CreateMap<Service, AddServiceCommand>().ReverseMap();
+            CreateMap<ServiceDto, AddServiceCommand>().ReverseMap();
 
-            CreateMap<Todo, EditTodoCommand>().ReverseMap();
-            CreateMap<TodoDto, EditTodoCommand>().ReverseMap();
+            CreateMap<Service, EditServiceCommand>().ReverseMap();
+            CreateMap<ServiceDto, EditServiceCommand>().ReverseMap();
         }
 
         public void CreateMapForUser()
@@ -68,10 +104,13 @@ namespace ITService.Domain
 
         public EntityMappingProfile()
         {
-            CreateMapForContact();
+            CreateMapForCategory();
+            CreateMapForEmployee();
             CreateMapForOrder();
+            CreateMapForOrderDetail();
+            CreateMapForProduct();
             CreateMapForRole();
-            CreateMapForTodo();
+            CreateMapForService();
             CreateMapForUser();
         }
     }

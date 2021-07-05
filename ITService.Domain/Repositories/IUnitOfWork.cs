@@ -5,10 +5,13 @@ namespace ITService.Domain.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IContactsRepository ContactsRepository { get; }
+        ICategoriesRepository CategoriesRepository { get; }
+        IEmployeesRepository EmployeesRepository { get; }
         IOrdersRepository OrdersRepository { get; }
+        IOrderDetailsRepository OrderDetailsRepository { get; }
+        IProductsRepository ProductsRepository { get; }
         IRolesRepository RolesRepository { get; }
-        ITodosRepository TodosRepository { get; }
+        IServicesRepository ServicesRepository { get; }
         IUsersRepository UsersRepository { get; }
         ITokenRepository TokenRepository { get; }
         Task CommitAsync();
