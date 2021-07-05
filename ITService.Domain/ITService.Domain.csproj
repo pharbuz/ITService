@@ -10,4 +10,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Query\Category\" />
+    <Folder Include="Query\Employee\" />
+    <Folder Include="Query\Service\" />
+    <Folder Include="Query\Product\" />
+    <Folder Include="Query\OrderDetail\" />
+  </ItemGroup>
+
 </Project>

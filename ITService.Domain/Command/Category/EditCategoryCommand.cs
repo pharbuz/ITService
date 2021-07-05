@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ITService.Domain.Command.Role
+namespace ITService.Domain.Command.Category
 {
-    public sealed class AddRoleCommand : ICommand
+    public sealed class EditCategoryCommand : ICommand
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

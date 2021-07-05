@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ITService.Domain.Command.Role
+namespace ITService.Domain.Query.Dto
 {
-    public sealed class AddRoleCommand : ICommand
+    public class CategoryDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
