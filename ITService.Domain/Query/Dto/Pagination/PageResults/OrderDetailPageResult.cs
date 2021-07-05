@@ -3,18 +3,16 @@ using System.Collections.Generic;
 
 namespace ITService.Domain.Query.Dto.Pagination.PageResults
 {
-    public class TodoPageResult<T>
+    public class OrderDetailPageResult<T>
     {
-        public Guid ContactId { get; }
         public List<T> Items { get; }
         public int TotalPages { get; }
         public int ItemsFrom { get; }
         public int ItemsTo { get; }
         public int TotalItemsCount { get; }
 
-        public TodoPageResult(List<T> items, int totalCount, int pageSize, int pageNumber, Guid contactId)
+        public OrderDetailPageResult(List<T> items, int totalCount, int pageSize, int pageNumber)
         {
-            ContactId = contactId;
             Items = items;
             TotalItemsCount = totalCount;
             ItemsFrom = pageSize * (pageNumber - 1) + 1;

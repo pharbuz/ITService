@@ -7,12 +7,8 @@ using ITService.Domain.Query.Dto.Pagination.PageResults;
 
 namespace ITService.Domain.Repositories
 {
-    public interface IRolesRepository
+    public interface IRolesRepository : IRepository<Role>
     {
-        Task<Role> GetAsync(Guid id);
-        Task DeleteAsync(Role role);
         Task<RolePageResult<Role>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection);
-        Task AddAsync(Role role);
-        Task UpdateAsync(Role role);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ITService.Domain.Query.Dto.Pagination.PageResults
 {
-    public class ContactPageResult<T>
+    public class EmployeePageResult<T>
     {
         public List<T> Items { get; }
         public int TotalPages { get; }
@@ -11,7 +11,7 @@ namespace ITService.Domain.Query.Dto.Pagination.PageResults
         public int ItemsTo { get; }
         public int TotalItemsCount { get; }
 
-        public ContactPageResult(List<T> items, int totalCount, int pageSize, int pageNumber)
+        public EmployeePageResult(List<T> items, int totalCount, int pageSize, int pageNumber)
         {
             Items = items;
             TotalItemsCount = totalCount;
