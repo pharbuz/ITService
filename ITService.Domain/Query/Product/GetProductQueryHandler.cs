@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.Product
 
         public async Task<ProductDto> HandleAsync(GetProductQuery query)
         {
-            var Product = await _unitOfWork.ProductsRepository.GetAsync(query.Id);
+            var product = await _unitOfWork.ProductsRepository.GetAsync(query.Id);
 
-            if (Product == null)
+            if (product == null)
             {
                 throw new NullReferenceException("Product does not exist!");
             }
 
-            return _mapper.Map<ProductDto>(Product);
+            return _mapper.Map<ProductDto>(product);
         }
     }
 }

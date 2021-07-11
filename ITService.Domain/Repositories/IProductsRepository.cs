@@ -8,6 +8,6 @@ namespace ITService.Domain.Repositories
 {
     public interface IProductsRepository : IRepository<Product>
     {
-        Task<ProductPageResult<Product>> SearchAsync(Guid userId, string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection);
+        Task<ProductPageResult<Product>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection);
     }
 }
