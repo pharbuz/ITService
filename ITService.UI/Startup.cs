@@ -7,7 +7,19 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using ITService.Domain.Query.Dto.Auth;
+using ITService.Domain.Repositories;
+using ITService.Infrastructure;
+using ITService.Infrastructure.Repositories;
+using ITService.UI.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ITService.UI
 {
@@ -20,10 +32,75 @@ namespace ITService.UI
 
         public IConfiguration Configuration { get; }
 
+        public ILifetimeScope AutofacContainer { get; private set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtOptions jwtOptions = new JwtOptions();
+            Configuration.GetSection("JwtOptions").Bind(jwtOptions);
+            services.AddAuthentication(option =>
+                {
+                    option.DefaultAuthenticateScheme = "Bearer";
+                    option.DefaultScheme = "Bearer";
+                    option.DefaultChallengeScheme = "Bearer";
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = jwtOptions.JwtIssuer,
+                        ValidAudience = jwtOptions.JwtIssuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.JwtKey))
+                    };
+
+                    cfg.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["Authorization"];
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+            services.AddSingleton(jwtOptions);
+
+            services.AddDistributedRedisCache(r => { r.Configuration = Configuration["redis:connectionString"]; });
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddControllersWithViews();
+
+            services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
+
+            var connectionString = Configuration.GetConnectionString("CrmDatabase");
+            services.AddDbContext<ITServiceDBContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            services.AddScoped<JwtAuthFilter>();
+        }
+
+        public void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
+            containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<CategoriesRepository>().As<ICategoriesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<EmployeesRepository>().As<IEmployeesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<OrdersRepository>().As<IOrdersRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<OrderDetailsRepository>().As<IOrderDetailsRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ProductsRepository>().As<IProductsRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RolesRepository>().As<IRolesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ServicesRepository>().As<IServicesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<TokenRepository>().As<ITokenRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<UsersRepository>().As<IUsersRepository>().InstancePerLifetimeScope();
+            containerBuilder.ConfigureMediator();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +122,8 @@ namespace ITService.UI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             app.UseEndpoints(endpoints =>
             {
