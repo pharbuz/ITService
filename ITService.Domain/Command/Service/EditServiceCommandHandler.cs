@@ -23,15 +23,15 @@ namespace ITService.Domain.Command.Service
                 return Result.Fail(validationResult);
             }
 
-            var Service = await _unitOfWork.ServicesRepository.GetAsync(command.Id);
-            if (Service == null)
+            var service = await _unitOfWork.ServicesRepository.GetAsync(command.Id);
+            if (service == null)
             {
                 return Result.Fail("Service does not exist.");
             }
 
-            _mapper.Map(command, Service);
+            _mapper.Map(command, service);
 
-            await _unitOfWork.ServicesRepository.UpdateAsync(Service);
+            await _unitOfWork.ServicesRepository.UpdateAsync(service);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using ITService.Domain.Repositories;
 
@@ -24,8 +25,10 @@ namespace ITService.Domain.Command.Service
                 return Result.Fail(validationResult);
             }
 
-            var role = _mapper.Map<Entities.Role>(command);
-            await _unitOfWork.RolesRepository.AddAsync(role);
+            var service = _mapper.Map<Entities.Service>(command);
+            service.Id = Guid.NewGuid();
+
+            await _unitOfWork.ServicesRepository.AddAsync(service);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();
