@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.Service
 
         public async Task<ServiceDto> HandleAsync(GetServiceQuery query)
         {
-            var Service = await _unitOfWork.ServicesRepository.GetAsync(query.Id);
+            var service = await _unitOfWork.ServicesRepository.GetAsync(query.Id);
 
-            if (Service == null)
+            if (service == null)
             {
                 throw new NullReferenceException("Service does not exist!");
             }
 
-            return _mapper.Map<ServiceDto>(Service);
+            return _mapper.Map<ServiceDto>(service);
         }
     }
 }
