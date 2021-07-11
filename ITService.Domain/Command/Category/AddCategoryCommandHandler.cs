@@ -25,13 +25,10 @@ namespace ITService.Domain.Command.Category
                 return Result.Fail(validationResult);
             }
 
-            var Category = _mapper.Map<Entities.Category>(command);
-            Category.Id = Guid.NewGuid();
+            var category = _mapper.Map<Entities.Category>(command);
+            category.Id = Guid.NewGuid();
 
-            Category.CreDate = DateTime.Now;
-            Category.ModDate = DateTime.Now;
-
-            await _unitOfWork.CategorysRepository.AddAsync(Category);
+            await _unitOfWork.CategoriesRepository.AddAsync(category);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

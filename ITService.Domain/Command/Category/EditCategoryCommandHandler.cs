@@ -24,17 +24,15 @@ namespace ITService.Domain.Command.Category
                 return Result.Fail(validationResult);
             }
 
-            var Category = await _unitOfWork.CategorysRepository.GetAsync(command.Id);
-            if (Category == null)
+            var category = await _unitOfWork.CategoriesRepository.GetAsync(command.Id);
+            if (category == null)
             {
                 return Result.Fail("Category does not exist.");
             }
 
-            _mapper.Map(command, Category);
+            _mapper.Map(command, category);
 
-            Category.ModDate = DateTime.Now;
-
-            await _unitOfWork.CategorysRepository.UpdateAsync(Category);
+            await _unitOfWork.CategoriesRepository.UpdateAsync(category);
             await _unitOfWork.CommitAsync(); 
 
             return Result.Ok();
