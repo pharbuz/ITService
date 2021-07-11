@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.User
 {
@@ -6,10 +7,14 @@ namespace ITService.Domain.Command.User
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.Username)
-                .NotEmpty();
+            RuleFor(x => x.Login)
+                .NotEmpty()
+                .MaximumLength(50);
             RuleFor(x => x.Password)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(256);
+            RuleFor(x => x.RememberMe)
+                .NotNull();
         }
     }
 }

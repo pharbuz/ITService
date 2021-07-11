@@ -33,7 +33,7 @@ namespace ITService.Domain.Command.User
             _mapper.Map(command, user);
 
             await _unitOfWork.UsersRepository.UpdateAsync(user);
-            user.ModDate = DateTime.Now;
+
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

@@ -22,7 +22,7 @@ namespace ITService.Domain.Command.User
                 return Result.Fail(validationResult);
             }
 
-            var token = await _unitOfWork.UsersRepository.LoginAsync(command.Username, command.Password, command.RememberMe);
+            var token = await _unitOfWork.UsersRepository.LoginAsync(command.Login, command.Password, command.RememberMe);
             if (string.IsNullOrEmpty(token))
             {
                 return Result.Fail("Invalid username or password.");

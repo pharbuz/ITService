@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.User
 {
@@ -7,17 +8,18 @@ namespace ITService.Domain.Command.User
         public AddUserCommandValidator()
         {
             RuleFor(x => x.Login)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(50);
             RuleFor(x => x.Password)
                 .NotEmpty()
-                .MinimumLength(8)
-                .MaximumLength(48);
+                .MaximumLength(256);
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .EmailAddress()
-                .MaximumLength(64);
+                .MaximumLength(50);
             RuleFor(x => x.RoleId)
-                .NotEmpty();
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
         }
     }
 }
