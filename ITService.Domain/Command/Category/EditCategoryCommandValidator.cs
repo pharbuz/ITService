@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.Category
 {
@@ -7,7 +8,9 @@ namespace ITService.Domain.Command.Category
         public EditCategoryCommandValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty();
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
             RuleFor(x => x.Name)
                 .MaximumLength(50)
                 .NotEmpty();

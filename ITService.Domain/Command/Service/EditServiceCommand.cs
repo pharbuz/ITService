@@ -6,7 +6,7 @@ namespace ITService.Domain.Command.Service
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public int? Price { get; set; }
+        public decimal? Price { get; set; }
         public string Image { get; set; }
         public Guid? CategryId { get; set; }
         public string Description { get; set; }

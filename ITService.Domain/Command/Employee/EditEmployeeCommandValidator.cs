@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.Employee
 {
@@ -7,33 +8,21 @@ namespace ITService.Domain.Command.Employee
         public EditEmployeeCommandValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty();
-            RuleFor(x => x.FirstName)
                 .NotEmpty()
-                .MaximumLength(30);
-            RuleFor(x => x.LastName)
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.Login)
                 .NotEmpty()
-                .MaximumLength(30);
-            RuleFor(x => x.Phone)
+                .MaximumLength(50);
+            RuleFor(x => x.Password)
                 .NotEmpty()
-                .MaximumLength(30);
+                .MaximumLength(256);
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .EmailAddress()
-                .MaximumLength(64);
-            RuleFor(x => x.Street)
-                .NotEmpty()
-                .MaximumLength(64);
-            RuleFor(x => x.PostalCode)
-                .NotEmpty()
                 .MaximumLength(50);
-            RuleFor(x => x.City)
+            RuleFor(x => x.Salary)
                 .NotEmpty()
-                .MaximumLength(50);
-            RuleFor(x => x.EmployeeComment)
-                .MaximumLength(2048);
-            RuleFor(x => x.UserId)
-                .NotEmpty();
+                .NotEqual(0m);
         }
     }
 }

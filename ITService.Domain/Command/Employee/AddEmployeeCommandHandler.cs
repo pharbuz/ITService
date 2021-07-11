@@ -25,13 +25,10 @@ namespace ITService.Domain.Command.Employee
                 return Result.Fail(validationResult);
             }
 
-            var Employee = _mapper.Map<Entities.Employee>(command);
-            Employee.Id = Guid.NewGuid();
+            var employee = _mapper.Map<Entities.Employee>(command);
+            employee.Id = Guid.NewGuid();
 
-            Employee.CreDate = DateTime.Now;
-            Employee.ModDate = DateTime.Now;
-
-            await _unitOfWork.EmployeesRepository.AddAsync(Employee);
+            await _unitOfWork.EmployeesRepository.AddAsync(employee);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

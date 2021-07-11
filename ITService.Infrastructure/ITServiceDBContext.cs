@@ -59,7 +59,7 @@ namespace ITService.Infrastructure
 
                 entity.Property(e => e.Login).HasMaxLength(50);
 
-                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.Password).HasMaxLength(256);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Employees)
@@ -157,7 +157,7 @@ namespace ITService.Infrastructure
 
                 entity.Property(e => e.Login).HasMaxLength(50);
 
-                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.Password).HasMaxLength(256);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)

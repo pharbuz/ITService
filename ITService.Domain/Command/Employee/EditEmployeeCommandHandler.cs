@@ -24,17 +24,15 @@ namespace ITService.Domain.Command.Employee
                 return Result.Fail(validationResult);
             }
 
-            var Employee = await _unitOfWork.EmployeesRepository.GetAsync(command.Id);
-            if (Employee == null)
+            var employee = await _unitOfWork.EmployeesRepository.GetAsync(command.Id);
+            if (employee == null)
             {
                 return Result.Fail("Employee does not exist.");
             }
 
-            _mapper.Map(command, Employee);
+            _mapper.Map(command, employee);
 
-            Employee.ModDate = DateTime.Now;
-
-            await _unitOfWork.EmployeesRepository.UpdateAsync(Employee);
+            await _unitOfWork.EmployeesRepository.UpdateAsync(employee);
             await _unitOfWork.CommitAsync(); 
 
             return Result.Ok();

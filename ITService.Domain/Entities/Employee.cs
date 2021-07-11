@@ -16,7 +16,7 @@ namespace ITService.Domain.Entities
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public int? Salary { get; set; }
+        public decimal? Salary { get; set; }
         public Guid? RoleId { get; set; }
 
         public virtual Role Role { get; set; }

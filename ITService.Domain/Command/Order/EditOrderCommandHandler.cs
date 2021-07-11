@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using ITService.Domain.Repositories;
 
@@ -31,8 +30,6 @@ namespace ITService.Domain.Command.Order
             }
 
             _mapper.Map(command, order);
-
-            order.ModDate = DateTime.Now;
 
             await _unitOfWork.OrdersRepository.UpdateAsync(order);
             await _unitOfWork.CommitAsync();

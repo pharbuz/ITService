@@ -27,8 +27,7 @@ namespace ITService.Domain.Command.Order
 
             var order = _mapper.Map<Entities.Order>(command);
             order.Id = Guid.NewGuid();
-            order.ModDate = DateTime.Now;
-            order.CreDate = DateTime.Now;
+
             await _unitOfWork.OrdersRepository.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
