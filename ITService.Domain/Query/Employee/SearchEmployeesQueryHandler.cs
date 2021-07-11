@@ -36,7 +36,7 @@ namespace ITService.Domain.Query.Employee
                 query.SortDirection
             );
 
-            return new EmployeePageResult<EmployeeDto>(_mapper.Map<List<EmployeeDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber, result.ContactId);
+            return new EmployeePageResult<EmployeeDto>(_mapper.Map<List<EmployeeDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber);
         }
     }
 }

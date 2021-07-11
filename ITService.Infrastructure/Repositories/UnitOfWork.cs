@@ -10,15 +10,18 @@ namespace ITService.Infrastructure.Repositories
 {
     public sealed class UnitOfWork : IUnitOfWork
     {
-        private readonly CRMContext _context;
+        private readonly ITServiceDBContext _context;
 
-        public UnitOfWork(CRMContext context, IPasswordHasher<User> hasher, JwtOptions jwtOptions, IHttpContextAccessor contextAccessor, IDistributedCache distributedCache)
+        public UnitOfWork(ITServiceDBContext context, IPasswordHasher<User> hasher, JwtOptions jwtOptions, IHttpContextAccessor contextAccessor, IDistributedCache distributedCache)
         {
             _context = context;
-            ContactsRepository = new ContactsRepository(context);
+            CategoriesRepository = new CategoriesRepository(context);
+            EmployeesRepository = new EmployeesRepository(context);
             OrdersRepository = new OrdersRepository(context);
+            OrderDetailsRepository = new OrderDetailsRepository(context);
+            ProductsRepository = new ProductsRepository(context);
             RolesRepository = new RolesRepository(context);
-            TodosRepository = new TodosRepository(context);
+            ServicesRepository = new ServicesRepository(context);
             TokenRepository = new TokenRepository(contextAccessor, jwtOptions, distributedCache);
             UsersRepository = new UsersRepository(context, hasher, jwtOptions, contextAccessor, TokenRepository);
         }
@@ -28,10 +31,13 @@ namespace ITService.Infrastructure.Repositories
             _context.Dispose();
         }
 
-        public IContactsRepository ContactsRepository { get; }
+        public ICategoriesRepository CategoriesRepository { get; }
+        public IEmployeesRepository EmployeesRepository { get; }
         public IOrdersRepository OrdersRepository { get; }
+        public IOrderDetailsRepository OrderDetailsRepository { get; }
+        public IProductsRepository ProductsRepository { get; }
         public IRolesRepository RolesRepository { get; }
-        public ITodosRepository TodosRepository { get; }
+        public IServicesRepository ServicesRepository { get; }
         public IUsersRepository UsersRepository { get; }
         public ITokenRepository TokenRepository { get; }
 
