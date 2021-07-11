@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ITService.Domain;
 using ITService.Domain.Command;
-using ITService.Domain.Command.Contact;
+using ITService.Domain.Command.User;
 using ITService.Domain.Entities;
 using ITService.Domain.Query;
 
@@ -52,7 +52,7 @@ namespace ITService.Infrastructure
                 .As<IDependencyResolver>()
                 .InstancePerLifetimeScope();
 
-            var handlersAssembly = typeof(AddContactCommandHandler).Assembly;
+            var handlersAssembly = typeof(AddUserCommandHandler).Assembly;
 
             containerBuilder
                 .RegisterAssemblyTypes(handlersAssembly)
