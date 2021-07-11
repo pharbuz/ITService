@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.Employee
 
         public async Task<EmployeeDto> HandleAsync(GetEmployeeQuery query)
         {
-            var Employee = await _unitOfWork.EmployeesRepository.GetAsync(query.Id);
+            var employee = await _unitOfWork.EmployeesRepository.GetAsync(query.Id);
 
-            if (Employee == null)
+            if (employee == null)
             {
                 throw new NullReferenceException("Employee does not exist!");
             }
 
-            return _mapper.Map<EmployeeDto>(Employee);
+            return _mapper.Map<EmployeeDto>(employee);
         }
     }
 }

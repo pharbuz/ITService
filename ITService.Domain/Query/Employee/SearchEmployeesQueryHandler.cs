@@ -29,7 +29,6 @@ namespace ITService.Domain.Query.Employee
             }
 
             var result = await _unitOfWork.EmployeesRepository.SearchAsync(
-                query.ContactId,
                 query.SearchPhrase,
                 query.PageNumber,
                 query.PageSize,
