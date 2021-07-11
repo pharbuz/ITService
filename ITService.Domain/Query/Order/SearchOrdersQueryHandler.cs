@@ -29,7 +29,6 @@ namespace ITService.Domain.Query.Order
             }
 
             var result = await _unitOfWork.OrdersRepository.SearchAsync(
-                query.ContactId,
                 query.SearchPhrase,
                 query.PageNumber,
                 query.PageSize,
@@ -37,7 +36,7 @@ namespace ITService.Domain.Query.Order
                 query.SortDirection
             );
 
-            return new OrderPageResult<OrderDto>(_mapper.Map<List<OrderDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber, result.ContactId);
+            return new OrderPageResult<OrderDto>(_mapper.Map<List<OrderDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber);
         }
     }
 }
