@@ -29,7 +29,6 @@ namespace ITService.Domain.Query.Category
             }
 
             var result = await _unitOfWork.CategoriesRepository.SearchAsync(
-                query.ContactId,
                 query.SearchPhrase,
                 query.PageNumber,
                 query.PageSize,
@@ -37,7 +36,7 @@ namespace ITService.Domain.Query.Category
                 query.SortDirection
             );
 
-            return new CategoryPageResult<CategoryDto>(_mapper.Map<List<CategoryDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber, result.ContactId);
+            return new CategoryPageResult<CategoryDto>(_mapper.Map<List<CategoryDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber);
         }
     }
 }

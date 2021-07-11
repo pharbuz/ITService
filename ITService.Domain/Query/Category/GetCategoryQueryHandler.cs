@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.Category
 
         public async Task<CategoryDto> HandleAsync(GetCategoryQuery query)
         {
-            var Category = await _unitOfWork.CategorysRepository.GetAsync(query.Id);
+            var category = await _unitOfWork.CategoriesRepository.GetAsync(query.Id);
 
-            if (Category == null)
+            if (category == null)
             {
                 throw new NullReferenceException("Category does not exist!");
             }
 
-            return _mapper.Map<CategoryDto>(Category);
+            return _mapper.Map<CategoryDto>(category);
         }
     }
 }

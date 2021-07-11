@@ -7,7 +7,6 @@ namespace ITService.Domain.Query.Category
 {
     public sealed class SearchCategoriesQuery : IQuery<CategoryPageResult<CategoryDto>>
     {
-        public Guid ContactId { get; set; }
         public string SearchPhrase { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
