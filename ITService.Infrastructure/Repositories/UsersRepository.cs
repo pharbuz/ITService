@@ -68,7 +68,7 @@ namespace ITService.Infrastructure.Repositories
                 }
                 else
                 {
-                    selectedColumn = columnSelectors["Username"];
+                    selectedColumn = columnSelectors["Login"];
                 }
 
                 baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);

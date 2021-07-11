@@ -3,7 +3,11 @@ using ITService.Domain.Enums;
 using ITService.Domain.Query.Dto.Pagination.PageResults;
 using ITService.Domain.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITService.Infrastructure.Repositories
 {
@@ -15,27 +19,55 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<Category> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task DeleteAsync(Category entity)
         {
-            throw new NotImplementedException();
+            _context.Categories.Remove(entity);
         }
 
         public async Task AddAsync(Category entity)
         {
-            throw new NotImplementedException();
+            await _context.Categories.AddAsync(entity);
         }
 
         public async Task UpdateAsync(Category entity)
         {
-            throw new NotImplementedException();
+            _context.Categories.Update(entity);
         }
 
         public async Task<CategoryPageResult<Category>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
-            throw new NotImplementedException();
+            var baseQuery = _context.Categories
+                .Where(o => searchPhrase == null
+                            || o.Name.ToString().Contains(searchPhrase.ToLower())
+                            || o.Description.ToLower().Contains(searchPhrase.ToLower()));
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<Category, object>>>()
+                {
+                    { nameof(Category.Name), x => x.Name },
+                    { nameof(Category.Description), x => x.Description }
+                };
+
+                Expression<Func<Category, object>> selectedColumn;
+
+                if (columnSelectors.Keys.Contains(orderBy))
+                {
+                    selectedColumn = columnSelectors[orderBy];
+                }
+                else
+                {
+                    selectedColumn = columnSelectors["Name"];
+                }
+
+                baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
+            }
+            var orders = await baseQuery.Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+            return new CategoryPageResult<Category>(orders, baseQuery.Count(), pageSize, pageNumber);
         }
     }
 }
