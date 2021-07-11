@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.Product
 {
@@ -7,13 +8,23 @@ namespace ITService.Domain.Command.Product
         public EditProductCommandValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty();
-            RuleFor(x => x.Title)
                 .NotEmpty()
-                .MaximumLength(30);
-            RuleFor(x => x.Content)
-                .MaximumLength(2048);
-            RuleFor(x => x.ContactId)
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .MaximumLength(50);
+            RuleFor(x => x.Price)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(0m);
+            RuleFor(x => x.Image)
+                .NotEmpty();
+            RuleFor(x => x.CategoryId)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.Description)
                 .NotEmpty();
         }
     }

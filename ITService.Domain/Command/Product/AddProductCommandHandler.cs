@@ -25,11 +25,10 @@ namespace ITService.Domain.Command.Product
                 return Result.Fail(validationResult);
             }
 
-            var Product = _mapper.Map<Entities.Product>(command);
-            Product.Id = Guid.NewGuid();
-            Product.CreDate = DateTime.Now;
-            Product.ModDate = DateTime.Now;
-            await _unitOfWork.ProductsRepository.AddAsync(Product);
+            var product = _mapper.Map<Entities.Product>(command);
+            product.Id = Guid.NewGuid();
+
+            await _unitOfWork.ProductsRepository.AddAsync(product);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

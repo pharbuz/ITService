@@ -24,17 +24,15 @@ namespace ITService.Domain.Command.Product
                 return Result.Fail(validationResult);
             }
 
-            var Product = await _unitOfWork.ProductsRepository.GetAsync(command.Id);
-            if (Product == null)
+            var product = await _unitOfWork.ProductsRepository.GetAsync(command.Id);
+            if (product == null)
             {
                 return Result.Fail("Product does not exist.");
             }
 
-            _mapper.Map(command, Product);
+            _mapper.Map(command, product);
 
-            Product.ModDate = DateTime.Now;
-
-            await _unitOfWork.ProductsRepository.UpdateAsync(Product);
+            await _unitOfWork.ProductsRepository.UpdateAsync(product);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();
