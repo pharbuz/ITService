@@ -24,17 +24,15 @@ namespace ITService.Domain.Command.OrderDetail
                 return Result.Fail(validationResult);
             }
 
-            var OrderDetail = await _unitOfWork.OrderDetailsRepository.GetAsync(command.Id);
-            if (OrderDetail == null)
+            var orderDetail = await _unitOfWork.OrderDetailsRepository.GetAsync(command.Id);
+            if (orderDetail == null)
             {
                 return Result.Fail("OrderDetail does not exist.");
             }
 
-            _mapper.Map(command, OrderDetail);
+            _mapper.Map(command, orderDetail);
 
-            OrderDetail.ModDate = DateTime.Now;
-
-            await _unitOfWork.OrderDetailsRepository.UpdateAsync(OrderDetail);
+            await _unitOfWork.OrderDetailsRepository.UpdateAsync(orderDetail);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

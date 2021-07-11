@@ -25,11 +25,10 @@ namespace ITService.Domain.Command.OrderDetail
                 return Result.Fail(validationResult);
             }
 
-            var OrderDetail = _mapper.Map<Entities.OrderDetail>(command);
-            OrderDetail.Id = Guid.NewGuid();
-            OrderDetail.CreDate = DateTime.Now;
-            OrderDetail.ModDate = DateTime.Now;
-            await _unitOfWork.OrderDetailsRepository.AddAsync(OrderDetail);
+            var orderDetail = _mapper.Map<Entities.OrderDetail>(command);
+            orderDetail.Id = Guid.NewGuid();
+
+            await _unitOfWork.OrderDetailsRepository.AddAsync(orderDetail);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

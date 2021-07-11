@@ -21,6 +21,7 @@ namespace ITService.Domain.Command.Order
                 .NotEqual(Guid.Empty);
             RuleFor(x => x.Amount)
                 .NotEmpty()
+                .NotNull()
                 .NotEqual(0m);
             RuleFor(x => x.OrderStatus)
                 .NotEmpty()

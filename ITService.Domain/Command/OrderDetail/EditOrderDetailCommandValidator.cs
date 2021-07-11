@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Data;
+using FluentValidation;
 
 namespace ITService.Domain.Command.OrderDetail
 {
@@ -7,14 +9,25 @@ namespace ITService.Domain.Command.OrderDetail
         public EditOrderDetailCommandValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty();
-            RuleFor(x => x.Title)
                 .NotEmpty()
-                .MaximumLength(30);
-            RuleFor(x => x.Content)
-                .MaximumLength(2048);
-            RuleFor(x => x.ContactId)
-                .NotEmpty();
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.OrderId)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.ProductId)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.ServiceId)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.Price)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(0m);
         }
     }
 }

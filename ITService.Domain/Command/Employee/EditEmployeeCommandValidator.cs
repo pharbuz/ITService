@@ -22,6 +22,7 @@ namespace ITService.Domain.Command.Employee
                 .MaximumLength(50);
             RuleFor(x => x.Salary)
                 .NotEmpty()
+                .NotNull()
                 .NotEqual(0m);
         }
     }

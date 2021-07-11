@@ -20,6 +20,7 @@ namespace ITService.Domain.Command.Order
                 .NotEqual(0m);
             RuleFor(x => x.OrderStatus)
                 .NotEmpty()
+                .NotNull()
                 .MaximumLength(50);
             RuleFor(x => x.OrderDate)
                 .NotEmpty()
