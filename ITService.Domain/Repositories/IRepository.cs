@@ -7,7 +7,7 @@ namespace ITService.Domain.Repositories
     {
         Task<T> GetAsync(Guid id);
         Task DeleteAsync(T entity);
-        Task AddAsync(T contact);
-        Task<T> UpdateAsync(T contact);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
     }
 }

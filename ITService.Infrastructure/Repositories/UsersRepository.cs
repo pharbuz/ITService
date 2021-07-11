@@ -8,71 +8,56 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ITService.Domain.Entities;
 using ITService.Domain.Enums;
 using ITService.Domain.Query.Dto.Auth;
 using ITService.Domain.Query.Dto.Pagination.PageResults;
 using ITService.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITService.Infrastructure.Repositories
 {
-    public sealed class UsersRepository : IUsersRepository
+    public sealed class UsersRepository : RepositoryBase, IUsersRepository
     {
-        private readonly CRMContext _dbContext;
         private readonly IPasswordHasher<User> _hasher;
         private readonly JwtOptions _jwtOptions;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly ITokenRepository _tokenRepository;
 
-        public UsersRepository(CRMContext dbContext, IPasswordHasher<User> hasher, JwtOptions jwtOptions, IHttpContextAccessor contextAccessor, ITokenRepository tokenRepository)
+        public UsersRepository(ITServiceDBContext context, IPasswordHasher<User> hasher, JwtOptions jwtOptions, IHttpContextAccessor contextAccessor, ITokenRepository tokenRepository) : base(context)
         {
             _tokenRepository = tokenRepository;
             _contextAccessor = contextAccessor;
             _jwtOptions = jwtOptions;
             _hasher = hasher;
-            _dbContext = dbContext;
         }
 
         public async Task<User> GetAsync(Guid id)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
             return user;
         }
 
         public async Task DeleteAsync(User user)
         {
-            _dbContext.Users.Remove(user);
+            _context.Users.Remove(user);
         }
 
         public async Task<UserPageResult<User>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
-            var baseQuery = _dbContext.Users
+            var baseQuery = _context.Users
                 .Where(u => searchPhrase == null ||
                              (u.Id.ToString().Contains(searchPhrase)
-                              || u.Username.ToLower().Contains(searchPhrase.ToLower())
-                              || u.Gender.ToLower().Contains(searchPhrase.ToLower())
-                              || u.FirstName.ToLower().Contains(searchPhrase.ToLower())
-                              || u.LastName.ToLower().Contains(searchPhrase.ToLower())
-                              || u.Phone.ToLower().Contains(searchPhrase.ToLower())
+                              || u.Login.ToLower().Contains(searchPhrase.ToLower())
                               || u.Email.ToLower().Contains(searchPhrase.ToLower())
-                              || u.Street.ToLower().Contains(searchPhrase.ToLower())
-                              || u.PostalCode.ToLower().Contains(searchPhrase.ToLower())
-                              || u.City.ToLower().Contains(searchPhrase.ToLower())
                              ));
             if (!string.IsNullOrEmpty(orderBy))
             {
                 var columnSelectors = new Dictionary<string, Expression<Func<User, object>>>()
                 {
-                    { nameof(User.Username), u => u.Username },
-                    { nameof(User.FirstName), u => u.FirstName },
-                    { nameof(User.LastName), u => u.LastName },
-                    { nameof(User.Phone), u => u.Phone },
-                    { nameof(User.Email), u => u.Email },
-                    { nameof(User.Street), u => u.Street },
-                    { nameof(User.PostalCode), u => u.PostalCode },
-                    { nameof(User.City), u => u.City }
+                    { nameof(User.Login), u => u.Login },
+                    { nameof(User.Email), u => u.Email }
                 };
 
                 Expression<Func<User, object>> selectedColumn;
@@ -98,13 +83,13 @@ namespace ITService.Infrastructure.Repositories
         public async Task AddAsync(User user)
         {
             user.Password = _hasher.HashPassword(user, user.Password);
-            await _dbContext.Users.AddAsync(user);
+            await _context.Users.AddAsync(user);
         }
 
         public async Task UpdateAsync(User user)
         {
             user.Password = _hasher.HashPassword(user, user.Password);
-            _dbContext.Users.Update(user);
+            _context.Users.Update(user);
         }
 
         private CookieBuilder CreateAuthorizationCookie(double time)
@@ -122,7 +107,7 @@ namespace ITService.Infrastructure.Repositories
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.Login),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
@@ -147,7 +132,7 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<string> LoginAsync(string username, string password, bool rememberMe)
         {
-            var userToBeVerified = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username.Equals(username));
+            var userToBeVerified = await _context.Users.FirstOrDefaultAsync(u => u.Login.Equals(username));
             if (userToBeVerified == null)
             {
                 return null;
