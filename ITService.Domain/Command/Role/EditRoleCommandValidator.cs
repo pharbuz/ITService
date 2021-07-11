@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace ITService.Domain.Command.Role
 {
@@ -7,10 +8,13 @@ namespace ITService.Domain.Command.Role
         public EditRoleCommandValidator()
         {
             RuleFor(x => x.Id)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
+            RuleFor(x => x.Id)
                 .NotEmpty();
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MaximumLength(50);
+                .NotEmpty();
         }
     }
 }

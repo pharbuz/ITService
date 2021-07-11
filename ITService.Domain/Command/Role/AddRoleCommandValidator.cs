@@ -10,8 +10,7 @@ namespace ITService.Domain.Command.Role
                 .NotEmpty()
                 .MaximumLength(50);
             RuleFor(x => x.Description)
-                .NotEmpty()
-                .MaximumLength(50);
+                .NotEmpty();
         }
     }
 }
