@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.OrderDetail
 
         public async Task<OrderDetailDto> HandleAsync(GetOrderDetailQuery query)
         {
-            var OrderDetail = await _unitOfWork.OrderDetailsRepository.GetAsync(query.Id);
+            var orderDetail = await _unitOfWork.OrderDetailsRepository.GetAsync(query.Id);
 
-            if (OrderDetail == null)
+            if (orderDetail == null)
             {
                 throw new NullReferenceException("OrderDetail does not exist!");
             }
 
-            return _mapper.Map<OrderDetailDto>(OrderDetail);
+            return _mapper.Map<OrderDetailDto>(orderDetail);
         }
     }
 }
