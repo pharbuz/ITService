@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace ITService.Domain.Entities
+namespace ITService.Infrastructure.Entities
 {
-    public partial class Manufacturer
+    public partial class Category
     {
-        public Manufacturer()
+        public Category()
         {
             Products = new HashSet<Product>();
         }

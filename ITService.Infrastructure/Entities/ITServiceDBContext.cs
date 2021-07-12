@@ -1,11 +1,10 @@
 ﻿using System;
-using ITService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace ITService.Infrastructure
+namespace ITService.Infrastructure.Entities
 {
     public partial class ITServiceDBContext : DbContext
     {
@@ -33,7 +32,8 @@ namespace ITService.Infrastructure
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=localhost;Database=ITServiceDB;User Id=SA;Password=hAsElKo123@;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=localhost;Database=ITServiceDB;User Id=SA;Password=hAsElKo123@;");
             }
         }
 
