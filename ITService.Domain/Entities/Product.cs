@@ -19,5 +19,6 @@ namespace ITService.Domain.Entities
         public Guid ManufacturerId { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
     }
 }

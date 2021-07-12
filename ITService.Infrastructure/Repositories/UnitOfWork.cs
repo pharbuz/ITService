@@ -16,12 +16,10 @@ namespace ITService.Infrastructure.Repositories
         {
             _context = context;
             CategoriesRepository = new CategoriesRepository(context);
-            EmployeesRepository = new EmployeesRepository(context);
             OrdersRepository = new OrdersRepository(context);
             OrderDetailsRepository = new OrderDetailsRepository(context);
             ProductsRepository = new ProductsRepository(context);
             RolesRepository = new RolesRepository(context);
-            ServicesRepository = new ServicesRepository(context);
             TokenRepository = new TokenRepository(contextAccessor, jwtOptions, distributedCache);
             UsersRepository = new UsersRepository(context, hasher, jwtOptions, contextAccessor, TokenRepository);
         }
@@ -32,12 +30,10 @@ namespace ITService.Infrastructure.Repositories
         }
 
         public ICategoriesRepository CategoriesRepository { get; }
-        public IEmployeesRepository EmployeesRepository { get; }
         public IOrdersRepository OrdersRepository { get; }
         public IOrderDetailsRepository OrderDetailsRepository { get; }
         public IProductsRepository ProductsRepository { get; }
         public IRolesRepository RolesRepository { get; }
-        public IServicesRepository ServicesRepository { get; }
         public IUsersRepository UsersRepository { get; }
         public ITokenRepository TokenRepository { get; }
 

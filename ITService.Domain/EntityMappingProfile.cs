@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using ITService.Domain.Command.Category;
-using ITService.Domain.Command.Employee;
 using ITService.Domain.Command.Order;
 using ITService.Domain.Command.OrderDetail;
 using ITService.Domain.Command.Product;
 using ITService.Domain.Command.Role;
-using ITService.Domain.Command.Service;
 using ITService.Domain.Command.User;
 using ITService.Domain.Entities;
 using ITService.Domain.Query.Dto;
@@ -27,13 +25,13 @@ namespace ITService.Domain
 
         public void CreateMapForEmployee()
         {
-            CreateMap<Employee, EmployeeDto>().ReverseMap();
+            //CreateMap<Employee, EmployeeDto>().ReverseMap();
 
-            CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
-            CreateMap<EmployeeDto, AddEmployeeCommand>().ReverseMap();
+            //CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
+            //CreateMap<EmployeeDto, AddEmployeeCommand>().ReverseMap();
 
-            CreateMap<Employee, EditEmployeeCommand>().ReverseMap();
-            CreateMap<EmployeeDto, EditEmployeeCommand>().ReverseMap();
+            //CreateMap<Employee, EditEmployeeCommand>().ReverseMap();
+            //CreateMap<EmployeeDto, EditEmployeeCommand>().ReverseMap();
         }
 
         public void CreateMapForOrder()
@@ -82,13 +80,13 @@ namespace ITService.Domain
 
         public void CreateMapForService()
         {
-            CreateMap<Service, ServiceDto>().ReverseMap();
+            //CreateMap<Service, ServiceDto>().ReverseMap();
 
-            CreateMap<Service, AddServiceCommand>().ReverseMap();
-            CreateMap<ServiceDto, AddServiceCommand>().ReverseMap();
+            //CreateMap<Service, AddServiceCommand>().ReverseMap();
+            //CreateMap<ServiceDto, AddServiceCommand>().ReverseMap();
 
-            CreateMap<Service, EditServiceCommand>().ReverseMap();
-            CreateMap<ServiceDto, EditServiceCommand>().ReverseMap();
+            //CreateMap<Service, EditServiceCommand>().ReverseMap();
+            //CreateMap<ServiceDto, EditServiceCommand>().ReverseMap();
         }
 
         public void CreateMapForUser()

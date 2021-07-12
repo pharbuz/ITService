@@ -35,27 +35,28 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<OrderPageResult<Order>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
-            var baseQuery = _context.Orders
-                .Where(o => searchPhrase == null
-                            || o.Amount.ToString().Contains(searchPhrase.ToLower())
-                            || o.OrderStatus.ToLower().Contains(searchPhrase.ToLower()));
-            if (!string.IsNullOrEmpty(orderBy))
-            {
-                var columnSelectors = new Dictionary<string, Expression<Func<Order, object>>>()
-                {
-                    { nameof(Order.Amount), o => o.Amount },
-                    { nameof(Order.OrderStatus), o => o.OrderStatus },
-                    { nameof(Order.OrderDate), o => o.OrderDate }
-                };
+            //var baseQuery = _context.Orders
+            //    .Where(o => searchPhrase == null
+            //                || o.Amount.ToString().Contains(searchPhrase.ToLower())
+            //                || o.OrderStatus.ToLower().Contains(searchPhrase.ToLower()));
+            //if (!string.IsNullOrEmpty(orderBy))
+            //{
+            //    var columnSelectors = new Dictionary<string, Expression<Func<Order, object>>>()
+            //    {
+            //        { nameof(Order.Amount), o => o.Amount },
+            //        { nameof(Order.OrderStatus), o => o.OrderStatus },
+            //        { nameof(Order.OrderDate), o => o.OrderDate }
+            //    };
 
-                var selectedColumn = columnSelectors[orderBy];
+            //    var selectedColumn = columnSelectors[orderBy];
 
-                baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
-            }
-            var orders = await baseQuery.Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize)
-                .ToListAsync();
-            return new OrderPageResult<Order>(orders, baseQuery.Count(), pageSize, pageNumber);
+            //    baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
+            //}
+            //var orders = await baseQuery.Skip(pageSize * (pageNumber - 1))
+            //    .Take(pageSize)
+            //    .ToListAsync();
+            //return new OrderPageResult<Order>(orders, baseQuery.Count(), pageSize, pageNumber);
+            return null;
         }
 
         public async Task UpdateAsync(Order order)
