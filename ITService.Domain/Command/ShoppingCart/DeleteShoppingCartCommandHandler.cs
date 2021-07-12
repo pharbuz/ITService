@@ -14,13 +14,13 @@ namespace ITService.Domain.Command.ShoppingCart
 
         public async Task<Result> HandleAsync(DeleteShoppingCartCommand command)
         {
-            var ShoppingCart = await _unitOfWork.ShoppingCartsRepository.GetAsync(command.Id);
-            if (ShoppingCart == null)
+            var shoppingCart = await _unitOfWork.ShoppingCartsRepository.GetAsync(command.Id);
+            if (shoppingCart == null)
             {
                 return Result.Fail("ShoppingCart does not exist.");
             }
 
-            await _unitOfWork.ShoppingCartsRepository.DeleteAsync(ShoppingCart);
+            await _unitOfWork.ShoppingCartsRepository.DeleteAsync(shoppingCart);
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

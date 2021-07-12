@@ -51,13 +51,19 @@ namespace ITService.Infrastructure.Repositories
                              (u.Id.ToString().Contains(searchPhrase)
                               || u.Login.ToLower().Contains(searchPhrase.ToLower())
                               || u.Email.ToLower().Contains(searchPhrase.ToLower())
+                              || u.Street.ToLower().Contains(searchPhrase.ToLower())
+                              || u.City.ToLower().Contains(searchPhrase.ToLower())
+                              || u.PostalCode.ToLower().Contains(searchPhrase.ToLower())
                              ));
             if (!string.IsNullOrEmpty(orderBy))
             {
                 var columnSelectors = new Dictionary<string, Expression<Func<User, object>>>()
                 {
                     { nameof(User.Login), u => u.Login },
-                    { nameof(User.Email), u => u.Email }
+                    { nameof(User.Email), u => u.Email },
+                    { nameof(User.Street), u => u.Street },
+                    { nameof(User.City), u => u.City },
+                    { nameof(User.PostalCode), u => u.PostalCode }
                 };
 
                 Expression<Func<User, object>> selectedColumn;

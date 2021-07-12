@@ -39,36 +39,33 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<CategoryPageResult<Category>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
-            //var baseQuery = _context.Categories
-            //    .Where(o => searchPhrase == null
-            //                || o.Name.ToString().Contains(searchPhrase.ToLower())
-            //                || o.Description.ToLower().Contains(searchPhrase.ToLower()));
-            //if (!string.IsNullOrEmpty(orderBy))
-            //{
-            //    var columnSelectors = new Dictionary<string, Expression<Func<Category, object>>>()
-            //    {
-            //        { nameof(Category.Name), x => x.Name },
-            //        { nameof(Category.Description), x => x.Description }
-            //    };
+            var baseQuery = _context.Categories
+                .Where(o => searchPhrase == null
+                            || o.Name.ToLower().Contains(searchPhrase.ToLower()));
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<Category, object>>>()
+                {
+                    { nameof(Category.Name), x => x.Name }
+                };
 
-            //    Expression<Func<Category, object>> selectedColumn;
+                Expression<Func<Category, object>> selectedColumn;
 
-            //    if (columnSelectors.Keys.Contains(orderBy))
-            //    {
-            //        selectedColumn = columnSelectors[orderBy];
-            //    }
-            //    else
-            //    {
-            //        selectedColumn = columnSelectors["Name"];
-            //    }
+                if (columnSelectors.Keys.Contains(orderBy))
+                {
+                    selectedColumn = columnSelectors[orderBy];
+                }
+                else
+                {
+                    selectedColumn = columnSelectors["Name"];
+                }
 
-            //    baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
-            //}
-            //var orders = await baseQuery.Skip(pageSize * (pageNumber - 1))
-            //    .Take(pageSize)
-            //    .ToListAsync();
-            //return new CategoryPageResult<Category>(orders, baseQuery.Count(), pageSize, pageNumber);
-            return null;
+                baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
+            }
+            var orders = await baseQuery.Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+            return new CategoryPageResult<Category>(orders, baseQuery.Count(), pageSize, pageNumber);
         }
     }
 }

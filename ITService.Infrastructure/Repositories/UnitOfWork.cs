@@ -30,10 +30,14 @@ namespace ITService.Infrastructure.Repositories
         }
 
         public ICategoriesRepository CategoriesRepository { get; }
+        public IFacilitiesRepository FacilitiesRepository { get; }
+        public IManufacturersRepository ManufacturersRepository { get; }
         public IOrdersRepository OrdersRepository { get; }
         public IOrderDetailsRepository OrderDetailsRepository { get; }
         public IProductsRepository ProductsRepository { get; }
         public IRolesRepository RolesRepository { get; }
+        public IServicesRepository ServicesRepository { get; }
+        public IShoppingCartsRepository ShoppingCartsRepository { get; }
         public IUsersRepository UsersRepository { get; }
         public ITokenRepository TokenRepository { get; }
 

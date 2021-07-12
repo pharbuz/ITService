@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using ITService.Domain.Command.Category;
+using ITService.Domain.Command.Facility;
+using ITService.Domain.Command.Manufacturer;
 using ITService.Domain.Command.Order;
 using ITService.Domain.Command.OrderDetail;
 using ITService.Domain.Command.Product;
 using ITService.Domain.Command.Role;
+using ITService.Domain.Command.Service;
+using ITService.Domain.Command.ShoppingCart;
 using ITService.Domain.Command.User;
 using ITService.Domain.Entities;
 using ITService.Domain.Query.Dto;
@@ -23,15 +27,26 @@ namespace ITService.Domain
             CreateMap<CategoryDto, EditCategoryCommand>().ReverseMap();
         }
 
-        public void CreateMapForEmployee()
+        public void CreateMapFacility()
         {
-            //CreateMap<Employee, EmployeeDto>().ReverseMap();
+            CreateMap<Facility, FacilityDto>().ReverseMap();
 
-            //CreateMap<Employee, AddEmployeeCommand>().ReverseMap();
-            //CreateMap<EmployeeDto, AddEmployeeCommand>().ReverseMap();
+            CreateMap<Facility, AddFacilityCommand>().ReverseMap();
+            CreateMap<FacilityDto, AddFacilityCommand>().ReverseMap();
 
-            //CreateMap<Employee, EditEmployeeCommand>().ReverseMap();
-            //CreateMap<EmployeeDto, EditEmployeeCommand>().ReverseMap();
+            CreateMap<Facility, EditFacilityCommand>().ReverseMap();
+            CreateMap<FacilityDto, EditFacilityCommand>().ReverseMap();
+        }
+
+        public void CreateMapManufacturer()
+        {
+            CreateMap<Manufacturer, ManufacturerDto>().ReverseMap();
+
+            CreateMap<Manufacturer, AddManufacturerCommand>().ReverseMap();
+            CreateMap<ManufacturerDto, AddManufacturerCommand>().ReverseMap();
+
+            CreateMap<Manufacturer, EditManufacturerCommand>().ReverseMap();
+            CreateMap<ManufacturerDto, EditManufacturerCommand>().ReverseMap();
         }
 
         public void CreateMapForOrder()
@@ -80,13 +95,24 @@ namespace ITService.Domain
 
         public void CreateMapForService()
         {
-            //CreateMap<Service, ServiceDto>().ReverseMap();
+            CreateMap<Service, ServiceDto>().ReverseMap();
 
-            //CreateMap<Service, AddServiceCommand>().ReverseMap();
-            //CreateMap<ServiceDto, AddServiceCommand>().ReverseMap();
+            CreateMap<Service, AddServiceCommand>().ReverseMap();
+            CreateMap<ServiceDto, AddServiceCommand>().ReverseMap();
 
-            //CreateMap<Service, EditServiceCommand>().ReverseMap();
-            //CreateMap<ServiceDto, EditServiceCommand>().ReverseMap();
+            CreateMap<Service, EditServiceCommand>().ReverseMap();
+            CreateMap<ServiceDto, EditServiceCommand>().ReverseMap();
+        }
+
+        public void CreateMapForShoppingCart()
+        {
+            CreateMap<ShoppingCart, ShoppingCartDto>().ReverseMap();
+
+            CreateMap<ShoppingCart, AddShoppingCartCommand>().ReverseMap();
+            CreateMap<ShoppingCartDto, AddShoppingCartCommand>().ReverseMap();
+
+            CreateMap<ShoppingCart, EditShoppingCartCommand>().ReverseMap();
+            CreateMap<ShoppingCartDto, EditShoppingCartCommand>().ReverseMap();
         }
 
         public void CreateMapForUser()
@@ -103,12 +129,14 @@ namespace ITService.Domain
         public EntityMappingProfile()
         {
             CreateMapForCategory();
-            CreateMapForEmployee();
+            CreateMapFacility();
+            CreateMapManufacturer();
             CreateMapForOrder();
             CreateMapForOrderDetail();
             CreateMapForProduct();
             CreateMapForRole();
             CreateMapForService();
+            CreateMapForShoppingCart();
             CreateMapForUser();
         }
     }

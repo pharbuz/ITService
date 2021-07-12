@@ -92,10 +92,14 @@ namespace ITService.UI
         {
             containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<CategoriesRepository>().As<ICategoriesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<FacilitiesRepository>().As<IFacilitiesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ManufacturersRepository>().As<IManufacturersRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<OrdersRepository>().As<IOrdersRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<OrderDetailsRepository>().As<IOrderDetailsRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<ProductsRepository>().As<IProductsRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<RolesRepository>().As<IRolesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ServicesRepository>().As<IServicesRepository>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ShoppingCartsRepository>().As<IShoppingCartsRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<TokenRepository>().As<ITokenRepository>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<UsersRepository>().As<IUsersRepository>().InstancePerLifetimeScope();
             containerBuilder.ConfigureMediator();
