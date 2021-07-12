@@ -12,6 +12,5 @@ namespace ITService.Domain.Entities
         public string Image { get; set; } 
         public double EstimatedServicePrice { get; set; }
         public string Description { get; set; }
-       
     }
 }

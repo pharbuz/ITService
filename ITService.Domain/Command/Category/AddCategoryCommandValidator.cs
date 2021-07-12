@@ -9,8 +9,6 @@ namespace ITService.Domain.Command.Category
             RuleFor(x => x.Name)
                 .MaximumLength(50)
                 .NotEmpty();
-            RuleFor(x => x.Description)
-                .NotEmpty();
         }
     }
 }

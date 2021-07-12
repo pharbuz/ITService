@@ -15,20 +15,58 @@ namespace ITService.Domain.Command.Order
                 .NotEmpty()
                 .NotNull()
                 .NotEqual(Guid.Empty);
-            RuleFor(x => x.EmployeeId)
-                .NotEmpty()
-                .NotNull()
-                .NotEqual(Guid.Empty);
-            RuleFor(x => x.Amount)
-                .NotEmpty()
-                .NotNull()
-                .NotEqual(0m);
             RuleFor(x => x.OrderStatus)
                 .NotEmpty()
+                .NotNull()
                 .MaximumLength(50);
             RuleFor(x => x.OrderDate)
                 .NotEmpty()
                 .NotNull();
+            RuleFor(x => x.Carrier)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(50);
+            RuleFor(x => x.City)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(100);
+            RuleFor(x => x.OrderTotal)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(0f);
+            RuleFor(x => x.PaymentDate)
+                .NotEmpty()
+                .NotNull();
+            RuleFor(x => x.PaymentDueDate)
+                .NotEmpty()
+                .NotNull();
+            RuleFor(x => x.PaymentStatus)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(50);
+            RuleFor(x => x.PhoneNumber)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(20);
+            RuleFor(x => x.PostalCode)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(30);
+            RuleFor(x => x.ShippingDate)
+                .NotEmpty()
+                .NotNull();
+            RuleFor(x => x.Street)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(100);
+            RuleFor(x => x.TrackingNumber)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(100);
+            RuleFor(x => x.TransactionId)
+                .NotEmpty()
+                .NotNull()
+                .MaximumLength(100);
         }
     }
 }

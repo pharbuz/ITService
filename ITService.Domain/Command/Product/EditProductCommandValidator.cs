@@ -26,6 +26,10 @@ namespace ITService.Domain.Command.Product
                 .NotEqual(Guid.Empty);
             RuleFor(x => x.Description)
                 .NotEmpty();
+            RuleFor(x => x.ManufacturerId)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(Guid.Empty);
         }
     }
 }

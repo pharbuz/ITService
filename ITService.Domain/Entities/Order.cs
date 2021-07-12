@@ -7,9 +7,6 @@ namespace ITService.Domain.Entities
 {
     public partial class Order
     {
-       
-
-        
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }

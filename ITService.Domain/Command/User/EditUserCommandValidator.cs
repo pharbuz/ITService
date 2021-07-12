@@ -24,6 +24,12 @@ namespace ITService.Domain.Command.User
                 .NotEmpty()
                 .NotNull()
                 .NotEqual(Guid.Empty);
+            RuleFor(x => x.City)
+                .NotEmpty();
+            RuleFor(x => x.PostalCode)
+                .NotEmpty();
+            RuleFor(x => x.Street)
+                .NotEmpty();
         }
     }
 }

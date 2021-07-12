@@ -15,14 +15,14 @@ namespace ITService.Domain.Command.OrderDetail
                 .NotEmpty()
                 .NotNull()
                 .NotEqual(Guid.Empty);
-            RuleFor(x => x.ServiceId)
-                .NotEmpty()
-                .NotNull()
-                .NotEqual(Guid.Empty);
             RuleFor(x => x.Price)
                 .NotEmpty()
                 .NotNull()
                 .NotEqual(0m);
+            RuleFor(x => x.Quantity)
+                .NotEmpty()
+                .NotNull()
+                .NotEqual(0);
         }
     }
 }
