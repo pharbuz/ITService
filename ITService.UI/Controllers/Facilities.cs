@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ITService.UI.Controllers
 {
-    public class RolesController
+    public class Facilities
     {
     }
 }
