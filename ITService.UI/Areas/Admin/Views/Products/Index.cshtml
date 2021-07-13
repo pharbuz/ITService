@@ -1,0 +1,71 @@
+﻿@using ITService.Domain.Query.Dto.Pagination.PageResults
+@using ITService.Domain.Query.Dto
+@model ProductPageResult<ProductDto>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+<div class="row">
+    <div class="col-8">
+        <h2 class="text-primary">Products</h2>
+    </div>
+    <div class="col-4 text-right">
+        <a class="btn btn-outline-primary" asp-action="Add"><i class="fas fa-plus"></i> &nbsp;Add new product</a>
+    </div>
+</div>
+
+<br />
+<div class="row">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" hidden>Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Category</th>
+                <th scope="col">Manufacturer</th>
+
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+
+
+            <tr>
+                <td hidden>
+                    @item.Id
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Price zł
+                </td>
+                <td>
+                    @item.Category.Name
+                </td>
+
+                <td>
+                    @item.Manufacturer.Name
+                </td>
+                <td>
+                    <a class="btn btn-click text-secondary btn-outline-secondary " asp-action="Update" asp-route-Id="@item.Id">Edit</a>
+                </td>
+                <td>
+                    <form method="post" asp-action="Delete" asp-route-id="@item.Id">
+                        <button type="submit" class="btn btn-link text-danger btn-outline-danger ">Delete</button>
+
+                    </form>
+                </td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

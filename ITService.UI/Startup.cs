@@ -131,7 +131,7 @@ namespace ITService.UI
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=identity}/{controller=Account}/{action=Login}/{id?}");
             });
         }
     }
