@@ -17,6 +17,7 @@ namespace ITService.Domain.Command.Service
             RuleFor(x => x.EstimatedServicePrice)
                 .NotEmpty()
                 .NotNull()
+                .GreaterThan(0)
                 .NotEqual(0f);
         }
     }

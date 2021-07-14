@@ -18,11 +18,11 @@ namespace ITService.Domain.Command.OrderDetail
             RuleFor(x => x.Price)
                 .NotEmpty()
                 .NotNull()
-                .NotEqual(0m);
+                .GreaterThan(0);
             RuleFor(x => x.Quantity)
                 .NotEmpty()
                 .NotNull()
-                .NotEqual(0);
+                .GreaterThan(0);
         }
     }
 }
