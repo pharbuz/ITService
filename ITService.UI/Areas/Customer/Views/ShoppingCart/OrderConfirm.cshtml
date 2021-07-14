@@ -1,0 +1,15 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Order Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container row rounded">
+    <div class="col-12 text-center">
+        <h2 class="text-primary text-center">Everything went good</h2><br />
+        <h6>Thank you for the purchase , we are happy to have you here</h6>
+        <img src="https://i.pinimg.com/736x/3c/9e/4b/3c9e4b32b67d641965915ee08db63844.jpg" width="50%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <h3>Your order number is : @Model</h3>
+    </div>
+</div>

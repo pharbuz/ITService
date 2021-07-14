@@ -1,4 +1,4 @@
-﻿@model ITService.Domain.Command.User.AddUserCommand
+﻿@model ITService.UI.ViewModels.AddUserViewModel
 
 @using ITService.Domain.Utilities
 @{
@@ -13,46 +13,48 @@
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Login"></label>
-                <input asp-for="Login" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
+                <label asp-for="User.Login"></label>
+                <input asp-for="User.Login" class="form-control" />
+                <span asp-validation-for="User.Login" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="User.Email"></label>
+                <input asp-for="User.Email" class="form-control" />
+                <span asp-validation-for="User.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <label >Phone number</label>
+                <input asp-for="User.PhoneNumber" class="form-control" />
+                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Street"></label>
-                <input asp-for="Street" class="form-control" />
-                <span asp-validation-for="Street" class="text-danger"></span>
+                <label asp-for="User.Street"></label>
+                <input asp-for="User.Street" class="form-control" />
+                <span asp-validation-for="User.Street" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="City"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
+                <label asp-for="User.City"></label>
+                <input asp-for="User.City" class="form-control" />
+                <span asp-validation-for="User.City" class="text-danger"></span>
             </div>
           
             <div class="form-group">
-                <label asp-for="PostalCode"></label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                <label asp-for="User.PostalCode"></label>
+                <input asp-for="User.PostalCode" class="form-control" />
+                <span asp-validation-for="User.PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-           
+                <label asp-for="User.Password"></label>
+                <input asp-for="User.Password" class="form-control" />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>   
             @if (User.IsInRole(Roles.AdminUserRole))
             {
-                ///Tu zrobić liste rozwijaną do wyboru roli
+                <div class="form-group">
+                    <label asp-for="User.RoleId"></label>
+                    @Html.DropDownListFor(m => m.User.RoleId, Model.Roles, "-Select a role", new { @class = "form-control" })
+                </div>
             }
 
             <button type="submit" class="btn btn-outline-primary">Register</button>

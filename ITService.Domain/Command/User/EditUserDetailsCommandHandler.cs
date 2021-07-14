@@ -5,20 +5,20 @@ using ITService.Domain.Repositories;
 
 namespace ITService.Domain.Command.User
 {
-    public sealed class EditUserCommandHandler : ICommandHandler<EditUserCommand>
+    public sealed class EditUserDetailsCommandHandler : ICommandHandler<EditUserDetailsCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public EditUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public EditUserDetailsCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result> HandleAsync(EditUserCommand command)
+        public async Task<Result> HandleAsync(EditUserDetailsCommand command)
         {
-            var validationResult = await new EditUserCommandValidator().ValidateAsync(command);
+            var validationResult = await new EditUserDetailsCommandValidator().ValidateAsync(command);
             if (!validationResult.IsValid)
             {
                 return Result.Fail(validationResult);
