@@ -15,5 +15,7 @@ namespace ITService.Domain.Query.Dto
         public string PaymentStatus { get; set; }
         public DateTime PaymentDate { get; set; }
         public DateTime PaymentDueDate { get; set; }
+        public string PhoneNumber { get; set; }
+       
     }
 }

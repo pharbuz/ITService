@@ -1,0 +1,85 @@
+﻿@using ITService.Domain.Query.Dto.Pagination.PageResults
+@using ITService.Domain.Query.Dto
+@model UserPageResult<UserDto>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+
+<div class="row">
+    <div class="col-8">
+        <h2 class="text-primary">@ViewData["Title"]</h2>
+    </div>
+    <div class="col-4 text-right">
+        <a class="btn btn-outline-primary" asp-area="Identity"  asp-action="Register" asp-controller="Account" ><i class="fas fa-plus"></i> &nbsp;Add new user</a>
+    </div>
+</div>
+
+<br />
+<div class="row">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" hidden>Id</th>
+        
+                <th scope="col">Login</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">Street</th>
+                <th scope="col">City</th>
+                <th scope="col">Postal code</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+
+
+            <tr>
+                <td hidden>
+                    @item.Id
+                </td>
+                <td>
+                    @item.Login
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+                <td>
+                    @item.Street
+                </td>
+                <td>
+                    @item.City
+                </td>
+                <td>
+                    @item.PostalCode
+
+                </td>
+
+                @if (item.LockoutEnd < DateTime.Now || item.LockoutEnd==null )
+                {
+                    <td>
+                        <a class="btn btn-danger text-white btn-outline-danger" asp-action="Lock" asp-route-Id="@item.Id">Lock</a>
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                        <a class="btn btn-danger text-white btn-outline-secondary" asp-action="Unlock" asp-route-Id="@item.Id">Unlock</a>
+                    </td>
+                }
+
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
