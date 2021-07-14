@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ITService.Domain.Utilities;
+using Stripe;
 
 namespace ITService.UI
 {
@@ -86,6 +88,11 @@ namespace ITService.UI
             });
 
             services.AddScoped<JwtAuthFilter>();
+
+
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+
         }
 
         public void ConfigureContainer(ContainerBuilder containerBuilder)
@@ -122,6 +129,7 @@ namespace ITService.UI
             app.UseStaticFiles();
 
             app.UseRouting();
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 
             app.UseAuthorization();
 

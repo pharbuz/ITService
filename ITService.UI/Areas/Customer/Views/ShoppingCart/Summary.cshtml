@@ -1,0 +1,141 @@
+﻿@model ITService.UI.ViewModels.ShoppingCartViewModel
+@using Microsoft.Extensions.Options
+
+@inject IOptions<ITService.Domain.Utilities.StripeSettings> Stripe
+@{
+    ViewData["Title"] = "Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form method="post">
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="row container">
+                    <div class="col-6" style="padding:12px;">
+
+                        <span style="font-size:25px;">Summary</span>
+                    </div>
+                    <div class="col-6" style="text-align:center; padding:12px;">
+                        <a asp-area="Customer" asp-action="Index" asp-controller="Cart" style="padding:8px; " class="btn btn-outline-info btn-sm btn-outline-success form-control">Go to cart</a>
+                    </div>
+                </div>
+                <div style="background-color:black; height:4px;">
+
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 pb-4">
+                                <div class="row">
+
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-primary">Delivery details:</span>
+                                    </h4>
+                                </div>
+
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Phone</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Order.PhoneNumber" type="number" class="form-control" />
+                                        <span asp-validation-for="Order.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Street Address</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Order.Street" type="text" class="form-control" />
+                                        <span asp-validation-for="Order.Street" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>City</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Order.City" type="text" class="form-control" />
+                                        <span asp-validation-for="Order.City" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Postal Code</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="Order.PostalCode" type="text" class="form-control" />
+                                        <span asp-validation-for="Order.PostalCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-primary">Summary:</span>
+                                </h4>
+                                <ul class="list-group mb-3">
+                                    @foreach (var item in Model.Shoppings)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="my-0">@item.Product.Name</h6>
+                                                <small class="text-muted">Quantity: @item.Count</small>
+                                                <br />
+                                                <small class="text-muted">Price: $@item.Product.Price</small>
+                                            </div>
+                                            <span class="text-muted" style="color:green">$@Decimal.Multiply(@item.Product.Price, @item.Count) </span>
+                                        </li>
+
+                                    }
+
+                                    <li class="list-group-item d-flex justify-content-between bg-light">
+                                        <small class="text-info">Order total</small>
+                                        <strong class="text-info">$@(Model.Order.OrderTotal)</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-8 pt-2">
+                            <p font-size:14px;">Estimate Arrival Date: @DateTime.Now.AddDays(5).ToShortDateString() - @DateTime.Now.AddDays(10).ToShortDateString()</p>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            @{
+                                var orderTotal = Model.Order.OrderTotal * 100;
+                            }
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="@Stripe.Value.PublishableKey"
+                                    data-amount="@orderTotal"
+                                    data-name="SarVol"
+                                    data-label="Place Order"
+                                    data-description="Get your best elements!!!"
+                                    data-locale="auto"
+                                    data-allow-remember-me="false"
+                                    data-image="https://previews.123rf.com/images/pinglabel/pinglabel1705/pinglabel170500040/77821258-close-up-of-electronic-circuits-in-technology-on-mainboard-background-main-board-cpu-motherboard-log.jpg"></script>
+                            <script>
+                                document.querySelector(".stripe-button-el").style.display = "none";
+                            </script>
+                            <button type="submit" value="Place Order" class="btn btn-outline-primary form-control">Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+

@@ -1,1 +1,302 @@
-﻿
+﻿@model ITService.UI.ViewModels.OrderDetailsViewModel
+@using ITService.Domain.Utilities
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@using Microsoft.Extensions.Options
+
+@inject IOptions<ITService.Domain.Utilities.StripeSettings> Stripe
+
+
+
+<form method="post">
+    <input hidden asp-for="Header.Id" />
+    <br />
+    <div class="backgroundWhite container">
+        <div class="card">
+            <div class="row container ">
+                <div class="col-6" style="padding:20px;">
+
+                    <span style="font-size:25px;">Order summary</span>
+                </div>
+                <div class="col-6" style="text-align:center; padding:20px;">
+                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary form-control ">Back</a>
+                </div>
+            </div>
+            <div style="background-color:black; height:4px;">
+
+            </div>
+            <div class="card-body">
+                <div class="container border-1 p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-5 offset-lg-0">
+                            <ul class="list-group mb-3">
+                                @foreach (var item in Model.Details)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between border">
+                                        <div class="row container">
+                                            <div class="col-9">
+                                                <input type="hidden" asp-for="@item.Id" />
+                                                <h6 class="my-0">@item.Product.Name</h6>
+                                                <small class="text-muted">Price:@item.Price$</small>
+                                                <br />
+                                                <small class="text-muted">Quantity:@item.Quantity</small>
+                                            </div>
+                                            <div class="col-3 text-right " style="padding-top:20px;">
+                                                <h5 class="text-success">$@item.Price @Decimal.Multiply(@item.Price, @item.Quantity)</h5>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+
+                                <li class="list-group-item bg-body">
+                                    <div class="row container" style="height:30px; ">
+                                        <div class="col-9" style="position: relative;">
+                                            <h4 class="text-dark" style="position:absolute;top:50%; transform:translateY(-50%)">Order total</h4>
+                                        </div>
+                                        <div class="col-3 text-right" style="position: relative;">
+                                            <h4 class="text-dark" style="position:absolute;top:50%; transform:translateY(-50%)">$@Model.Header.OrderTotal</h4>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <input formaction="/Admin/Order/Apply" type="submit" value="elo" class="btn btn-primary form-control" formmethod="post" />
+                            @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                            {
+                                <br />
+                                @if (Model.Header.OrderStatus == OrderStatuses.StatusApproved)
+                                {
+                                    <input asp-action="HandleOrder" type="submit" value="Handle" class="btn btn-primary form-control" formmethod="post" />
+
+                                }
+                                @if (Model.Header.OrderStatus == OrderStatuses.StatusInProcess && Model.Header.PaymentStatus == OrderStatuses.PaymentStatusApproved)
+                                {
+                                    <input formaction="/Admin/Order/Shipment" type="submit" value="Ship the order" onclick="return validateInput()" class="btn btn-primary form-control" formmethod="post" />
+                                }
+
+                            }
+                            else
+                            {
+                                <label class="btn btn-outline-primary form-control">@Model.Header.OrderStatus</label>
+                            }
+                            @{
+                                var orderTotal = Model.Header.OrderTotal * 100;
+                            }
+                            @if ((Model.Header.PaymentStatus == OrderStatuses.PaymentStatusPending || Model.Header.PaymentStatus == OrderStatuses.PaymentStatusRejected))
+                            {
+
+                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                        data-key="@Stripe.Value.PublishableKey"
+                                        data-amount="@orderTotal"
+                                        data-name="SarVol"
+                                        data-label="Place Order"
+                                        data-description="Get your best supless!!!"
+                                        data-locale="auto"
+                                        data-allow-remember-me="false"
+                                        data-image="https://redseo.pl/wp-content/uploads/2017/12/market.png">
+
+                                </script>
+                                <script>
+                                    document.querySelector(".stripe-button-el").style.display = "none";
+                                </script>
+                                <button asp-area="Admin" asp-controller="Order" asp-action="Pay" type="submit" class="btn btn-success form-control" formmethod="post">Pay</button>
+
+                            }
+                            <div style="margin-top:20px;"></div>
+
+                            @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus != OrderStatuses.StatusRefunded && Model.Header.OrderStatus != OrderStatuses.StatusCancelled)
+                            {
+                                <a class="btn btn-outline-primary form-control" asp-action="Cancel" asp-route-id="@Model.Header.Id">Cancel</a>
+                            }
+
+
+
+                        </div>
+                        <div class="col-12 col-lg-6 offset-lg-1 pb-4">
+
+                            <div class="row my-1">
+                                <div class="col-3">Street adress</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    {
+                                        <input asp-for="Header.Street" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.Street" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">City</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    {
+                                        <input asp-for="Header.City" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.City" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Phone number</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    {
+                                        <input asp-for="Header.PhoneNumber" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.PhoneNumber" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+
+
+                            <div class="row my-1">
+                                <div class="col-3">Postal code</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    {
+                                        <input asp-for="Header.PostalCode" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.PostalCode" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Email adress</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    {
+                                        <input asp-for="Header.User.Email" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.User.Email" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Tracking number</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    {
+                                        <input asp-for="Header.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.TrackingNumber" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Carrier</div>
+                                <div class="col-9">
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    {
+                                        <input asp-for="Header.Carrier" id="carrier" type="text" class="form-control" />
+                                    }
+                                    else
+                                    {
+                                        <input readonly asp-for="Header.Carrier" type="text" class="form-control" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+
+                                    <input readonly value="@Model.Header.OrderDate.ToShortDateString()" type="text" class="form-control" />
+
+                                </div>
+                            </div>
+
+
+                            <div class="row my-1">
+                                <div class="col-3">Shipping Date</div>
+                                <div class="col-9">
+                                    <input value="@Model.Header.ShippingDate.ToShortDateString()" id="shippingDate" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+                            @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                            {
+                                <div class="row my-1">
+                                    <div class="col-3">Transaction ID</div>
+                                    <div class="col-9">
+                                        <input asp-for="Header.TransactionId" type="text" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+
+                                    <div class="col-3">Payment due date</div>
+                                    <div class="col-9">
+                                        <input value="@Model.Header.PaymentDueDate.ToShortDateString()" readonly type="text" class="form-control" />
+                                    </div>
+                                    <div class="col-3">payment date</div>
+                                    <div class="col-9">
+                                        <input value="@Model.Header.PaymentDate.ToShortDateString()" readonly id="paymentDate" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">Payment status</div>
+                                    <div class="col-9">
+                                        <input asp-for="Header.PaymentStatus" type="text" readonly class="form-control" />
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function validateInput() {
+            var trackingNumber = document.querySelector("#trackingNumber").value;
+            var carrier = document.querySelector("#carrier").value;
+            if (trackingNumber.toString() == "") {
+                return false;
+            }
+            else if (carrier.toString() == "") {
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+
+            let shipping = document.querySelector("#shippingDate");
+
+            if (shipping.value == "01.01.0001") {
+                shipping.value = "";
+            }
+
+
+            let payment = document.querySelector("#paymentDate");
+            if (payment.value == "01.01.0001") {
+                payment.value = "";
+            }
+
+        });
+
+
+    </script>
+
+
+
+}

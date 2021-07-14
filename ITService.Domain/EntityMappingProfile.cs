@@ -122,8 +122,8 @@ namespace ITService.Domain
             CreateMap<User, AddUserCommand>().ReverseMap();
             CreateMap<UserDto, AddUserCommand>().ReverseMap();
 
-            CreateMap<User, EditUserCommand>().ReverseMap();
-            CreateMap<UserDto, EditUserCommand>().ReverseMap();
+            CreateMap<User, EditUserDetailsCommand>().ReverseMap();
+            CreateMap<UserDto, EditUserDetailsCommand>().ReverseMap();
         }
 
         public EntityMappingProfile()

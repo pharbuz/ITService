@@ -14,6 +14,7 @@ namespace ITService.Domain.Utilities
         public const string StatusShipped = "Shipped";
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
+        public const string StatusInProcess = "Process";
 
         public const string PaymentStatusPending = "Waiting";
         public const string PaymentStatusApproved = "Approved";

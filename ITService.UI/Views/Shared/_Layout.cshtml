@@ -28,42 +28,44 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="Costumer" asp-controller="Facilities" asp-action="Index">Facilities</a>
                         </li>
-                        @*@if (User.IsInRole(Roles.AdminUserRole))*@
-                        @*{*@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Content management
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Services" asp-action="Index">Services</a>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Facilities" asp-action="Index">Facilities</a>
+                        @if (User.IsInRole(Roles.AdminUserRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Content management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Services" asp-action="Index">Services</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a>
+                                </div>
+                            </li>
 
+                        }
 
-                            </div>
-                        </li>
+                        @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                        {
 
-                        @*}*@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Resources management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Facilities" asp-action="Index">Facilities</a>
+                                </div>
+                            </li>
 
-                        @*@if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))*@
-                        @*{*@
+                        }
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Resources management
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
-                            </div>
-                        </li>
-                        @*}*@
                         <li style="color:white;">
-                            <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link"> 
+                            <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
                                 <i class="fas fa-shopping-cart"></i> &nbsp;
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link  text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
                         </li>
 
 

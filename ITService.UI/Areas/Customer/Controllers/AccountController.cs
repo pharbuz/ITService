@@ -13,5 +13,17 @@ namespace ITService.UI.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        public IActionResult ChangeDetails()
+        {
+            return View();
+        }
+
+        
+
     }
 }
