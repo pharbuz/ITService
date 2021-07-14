@@ -18,6 +18,7 @@ namespace ITService.Domain.Command.ShoppingCart
             RuleFor(x => x.Count)
                 .NotEmpty()
                 .NotNull()
+                .GreaterThan(0)
                 .NotEqual(0);
         }
     }
