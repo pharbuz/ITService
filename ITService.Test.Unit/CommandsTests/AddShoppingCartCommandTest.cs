@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using ITService.Domain;
-using ITService.Domain.Command.Manufacturer;
+using ITService.Domain.Command.ShoppingCart;
 using ITService.Domain.Repositories;
 using ITService.Test.Unit.Models;
 using NSubstitute;
@@ -14,48 +14,41 @@ using Xunit;
 
 namespace ITService.Test.Unit
 {
-    public class AddManufacturerCommandTest
+    public class AddShoppingCartCommandTest
     {
         [Fact]
-        public void AddManufacturer_ShouldSucces()
+        public void AddShoppingCart_ShouldSucces()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new ManufacturerProxy
+                var command = new AddShoppingCartCommand
                 {
-
-                };
-                var command = new AddManufacturerCommand
-                {
-
-                    Name = "Nazwa producenta",
-
+                    Count = 3,
+                    ProductId = Guid.NewGuid(),
+                    UserId = Guid.NewGuid()
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddManufacturerCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddShoppingCartCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsSuccess.Should().Be(true);
             }
         }
         [Fact]
-        public void AddManufacturer_ShouldFail()
+        public void AddShoppingCart_ShouldFail()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new ManufacturerProxy
+
+                var command = new AddShoppingCartCommand
                 {
-
-                };
-                var command = new AddManufacturerCommand
-                {
-
-                    Name = null,
-
+                    Count = -3,
+                    ProductId = Guid.NewGuid(),
+                    UserId = Guid.NewGuid()
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddManufacturerCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddShoppingCartCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsFailure.Should().Be(true);
             }

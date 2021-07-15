@@ -10,6 +10,7 @@ namespace ITService.Domain.Query.Category
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private IUnitOfWork unitOfWorkSubstitute;
 
         public GetCategoryQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
