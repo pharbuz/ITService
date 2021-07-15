@@ -19,7 +19,7 @@ namespace ITService.Domain.Query.Facility
 
         public async Task<FacilityDto> HandleAsync(GetFacilityQuery query)
         {
-            var Facility = await _unitOfWork.CategoriesRepository.GetAsync(query.Id);
+            var Facility = await _unitOfWork.FacilitiesRepository.GetAsync(query.Id);
 
             if (Facility == null)
             {

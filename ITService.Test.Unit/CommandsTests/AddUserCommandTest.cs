@@ -23,17 +23,6 @@ namespace ITService.Test.Unit
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new UserProxy 
-                {
-                    Login = "Jan",
-                    Password = "Hasło",
-                    Street = "Sucharskiego",
-                    City = "Rzeszów",
-                    Email = "email@gmail.com",
-                    PhoneNumber = "123456789",
-                    PostalCode = "35-230",
-                    RoleId = Guid.NewGuid()
-                };
                 var command = new AddUserCommand
                 {
                     Login = "Jan",
