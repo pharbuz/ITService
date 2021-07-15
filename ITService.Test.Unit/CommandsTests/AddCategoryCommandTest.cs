@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using ITService.Domain;
-using ITService.Domain.Command.OrderDetail;
+using ITService.Domain.Command.Category;
 using ITService.Domain.Repositories;
 using ITService.Test.Unit.Models;
 using NSubstitute;
@@ -14,50 +14,37 @@ using Xunit;
 
 namespace ITService.Test.Unit
 {
-    public class AddOrderDetailCommandTest
+    public class AddCategoryCommandTest
     {
         [Fact]
-        public void AddOrderDetail_ShouldSucces()
+        public void AddCategory_ShouldSucces()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new OrderDetailProxy
+                var command = new AddCategoryCommand
                 {
-
-                };
-                var command = new AddOrderDetailCommand
-                {
-                    Price = 21,
-                    Quantity = 5,
-                    OrderId = Guid.NewGuid(),
-                    ProductId = Guid.NewGuid()
+                    Name = "Nowa kategoria"
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddOrderDetailCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddCategoryCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsSuccess.Should().Be(true);
             }
         }
         [Fact]
-        public void AddOrderDetail_ShouldFail()
+        public void AddCategory_ShouldFail()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new OrderDetailProxy
-                {
 
-                };
-                var command = new AddOrderDetailCommand
+                var command = new AddCategoryCommand
                 {
-                    Price = 21,
-                    Quantity = -3,
-                    OrderId = Guid.NewGuid(),
-                    ProductId = Guid.NewGuid()
+                    Name = null
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddOrderDetailCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddCategoryCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsFailure.Should().Be(true);
             }

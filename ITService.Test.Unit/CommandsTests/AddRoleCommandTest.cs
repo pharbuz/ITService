@@ -21,10 +21,6 @@ namespace ITService.Test.Unit
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new RoleProxy
-                {
-
-                };
                 var command = new AddRoleCommand
                 {
                     Name = "Nowa rola"                    

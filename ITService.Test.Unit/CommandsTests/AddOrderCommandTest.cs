@@ -21,10 +21,6 @@ namespace ITService.Test.Unit
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new OrderProxy
-                {
-
-                };
                 var command = new AddOrderCommand
                 {
                     Carrier = "sposób dostawy",

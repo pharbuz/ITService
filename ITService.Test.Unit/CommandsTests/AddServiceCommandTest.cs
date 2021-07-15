@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using ITService.Domain;
-using ITService.Domain.Command.Product;
+using ITService.Domain.Command.Service;
 using ITService.Domain.Repositories;
 using ITService.Test.Unit.Models;
 using NSubstitute;
@@ -14,54 +14,43 @@ using Xunit;
 
 namespace ITService.Test.Unit
 {
-    public class AddProductCommandTest
+    public class AddServiceCommandTest
     {
         [Fact]
-        public void AddProduct_ShouldSucces()
+        public void AddService_ShouldSucces()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new ProductProxy
+                var command = new AddServiceCommand
                 {
-
-                };
-                var command = new AddProductCommand
-                {
-                    Name = "Nowa produkt",
-                    CategoryId = Guid.NewGuid(),
-                    Description = "opis produktu",
-                    Image = "url do obrazka",
-                    ManufacturerId = Guid.NewGuid(),
-                    Price = 120
+                    Name = "Nowa usługa",
+                    EstimatedServicePrice =300,
+                    Description = "opis usługi",
+                    Image = "url od obrazka"
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddProductCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddServiceCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsSuccess.Should().Be(true);
             }
         }
         [Fact]
-        public void AddProduct_ShouldFail()
+        public void AddService_ShouldFail()
         {
             using (var sut = new SystemUnderTest())
             {
-                var user = new ProductProxy
-                {
 
-                };
-                var command = new AddProductCommand
+                var command = new AddServiceCommand
                 {
-                    Name = "Nowa produkt",
-                    CategoryId = Guid.NewGuid(),
-                    Description = "opis produktu",
-                    Image = null,
-                    ManufacturerId = Guid.NewGuid(),
-                    Price = 120
+                    Name = "Nowa usługa",
+                    EstimatedServicePrice = -300,
+                    Description = "opis usługi",
+                    Image = "url od obrazka"
                 };
                 var unitOfWorkSubstitute = Substitute.For<IUnitOfWork>();
                 var mapperSubsitute = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new EntityMappingProfile())));
-                var handler = new AddProductCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
+                var handler = new AddServiceCommandHandler(unitOfWorkSubstitute, mapperSubsitute);
                 var result = handler.HandleAsync(command);
                 result.Result.IsFailure.Should().Be(true);
             }
