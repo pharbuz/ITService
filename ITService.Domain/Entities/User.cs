@@ -22,7 +22,6 @@ namespace ITService.Domain.Entities
         public string PostalCode { get; set; }
         public string Street { get; set; }
         public string PhoneNumber { get; set; }
-
         public DateTime? LockoutEnd { get; set; }
 
         public virtual Role Role { get; set; }

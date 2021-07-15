@@ -33,7 +33,7 @@ namespace ITService.Infrastructure
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=localhost;Database=ITServiceDB;User Id=SA;Password=hAsElKo123@;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=ITServiceDB;User Id=SA;Password=hAsElKo123@;");
             }
         }
 
@@ -226,6 +226,10 @@ namespace ITService.Infrastructure
                 entity.Property(e => e.Login).HasMaxLength(50);
 
                 entity.Property(e => e.Password).HasMaxLength(256);
+
+                entity.Property(e => e.LockoutEnd)
+                                        .HasColumnType("datetime")
+                    .HasDefaultValueSql("('0001-01-01T00:00:00.000')");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)

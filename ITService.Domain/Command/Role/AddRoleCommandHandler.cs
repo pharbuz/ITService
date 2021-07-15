@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using ITService.Domain.Repositories;
 
@@ -25,6 +26,7 @@ namespace ITService.Domain.Command.Role
             }
 
             var role = _mapper.Map<Entities.Role>(command);
+            role.Id = Guid.NewGuid();
             await _unitOfWork.RolesRepository.AddAsync(role);
             await _unitOfWork.CommitAsync();
 

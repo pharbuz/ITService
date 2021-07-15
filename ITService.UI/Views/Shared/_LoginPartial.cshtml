@@ -2,20 +2,25 @@
 
 <ul class="navbar-nav">
     @if (User.Identity.IsAuthenticated)
-    {  
+    {
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @User.Identity.Name!
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" asp-area="Customer" asp-controller="Account" asp-action="ChangePassword">Change password</a>
-                <a class="dropdown-item" asp-area="Customer" asp-controller="Account" asp-action="ChangeDetails">Change details</a>       
+                <a class="dropdown-item" asp-area="Customer" asp-controller="Account" asp-action="ChangeDetails">Change details</a>
             </div>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
                 <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
             </form>
+        </li>
+        <li style="color:white;">
+            <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> &nbsp;
+            </a>
         </li>
     }
     else
@@ -25,6 +30,11 @@
         </li>
         <li class="nav-item">
             <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+        <li style="color:white;">
+            <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> &nbsp;
+            </a>
         </li>
     }
 </ul>
