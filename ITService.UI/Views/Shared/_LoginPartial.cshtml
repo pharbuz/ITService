@@ -1,5 +1,4 @@
 ﻿
-
 <ul class="navbar-nav">
     @if (User.Identity.IsAuthenticated)
     {
@@ -21,6 +20,9 @@
             <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
                 <i class="fas fa-shopping-cart"></i> &nbsp;
             </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
     }
     else

@@ -19,67 +19,61 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Customer" asp-controller="Home" style="color:firebrick" asp-action="Index">Service4Now</a>
-                        </li>
-                        <li>
-                            <form class="form-inline" method="post">
-                                <input name="phrase" accesskey="phrase" class="form-control " type="search" placeholder="Search" aria-label="Search">
-                                <button asp-action="Search" asp-controller="Home" asp-area="Customer" class="btn btn-outline-success " type="submit">Search</button>
-                            </form>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Customer" asp-controller="Services" asp-action="Index">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Customer" asp-controller="Facilities" asp-action="Index">Facilities</a>
-                        </li>
-                        @if (User.IsInRole(Roles.AdminUserRole))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Content management
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Services" asp-action="Index">Services</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a>
-                                </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Customer" asp-controller="Home" style="color:firebrick" asp-action="Index">Service4Now</a>
+                            </li>
+                            <li>
+                                <form class="form-inline" method="post">
+                                    <input name="phrase" accesskey="phrase" class="form-control " type="search" placeholder="Search" aria-label="Search">
+                                    <button asp-action="Search" asp-controller="Home" asp-area="Customer" class="btn btn-outline-success " type="submit">Search</button>
+                                </form>
                             </li>
 
-                        }
-
-                        @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
-                        {
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Resources management
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Facilities" asp-action="Index">Facilities</a>
-                                </div>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Customer" asp-controller="Services" asp-action="Index">Services</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Customer" asp-controller="Facilities" asp-action="Index">Facilities</a>
+                            </li>
+                            @if (User.IsInRole(Roles.AdminUserRole))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Content management
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Services" asp-action="Index">Services</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a>
+                                    </div>
+                                </li>
 
-                        }
+                            }
 
-                        <li class="nav-item">
-                            <a class="nav-link  text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
-                        </li>
+                            @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                            {
 
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Resources management
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Facilities" asp-action="Index">Facilities</a>
+                                    </div>
+                                </li>
 
-
-
-
-                    </ul>
-
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link  text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+                        </ul>
+                    }
                     <partial name="_LoginPartial" />
-
-
                 </div>
             </div>
         </nav>

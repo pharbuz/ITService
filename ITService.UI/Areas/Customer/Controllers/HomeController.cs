@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using ITService.Domain;
 using ITService.Domain.Enums;
 using ITService.Domain.Query.Product;
+using ITService.UI.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITService.UI.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [ServiceFilter(typeof(JwtAuthFilter))]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IMediator _mediator;
@@ -34,6 +38,11 @@ namespace ITService.UI.Areas.Customer.Controllers
         }
 
         public async Task<IActionResult> Details()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Search()
         {
             return View();
         }

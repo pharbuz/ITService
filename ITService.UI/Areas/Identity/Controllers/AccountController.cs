@@ -42,7 +42,7 @@ namespace ITService.UI.Areas.Identity.Controllers
                 return View();
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace ITService.UI.Areas.Identity.Controllers
         {
             await _mediator.CommandAsync(new LogoutCommand());
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "Customer"});
         }
 
         public async Task<IActionResult> Register()

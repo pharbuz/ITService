@@ -8,10 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ITService.UI.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITService.UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [ServiceFilter(typeof(JwtAuthFilter))]
+    [Authorize]
     public class ServicesController : Controller
     {
         private readonly IWebHostEnvironment _hostEnviroment;
