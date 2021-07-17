@@ -9,11 +9,6 @@ namespace ITService.UI.Areas.Customer.Controllers
     [Area("Customer")]
     public class AccountController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult ChangePassword()
         {
             return View();

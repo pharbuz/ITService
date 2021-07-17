@@ -28,6 +28,7 @@ namespace ITService.Domain.Command.User
 
             var user = _mapper.Map<Entities.User>(command);
             user.Id = Guid.NewGuid();
+            user.LockoutEnd = DateTime.Now;
 
             await _unitOfWork.UsersRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();

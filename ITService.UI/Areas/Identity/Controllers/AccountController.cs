@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using ITService.Domain;
 using ITService.Domain.Command.Role;
 using ITService.Domain.Command.User;
+using ITService.Domain.Entities;
 using ITService.Domain.Enums;
 using ITService.Domain.Query.Role;
+using ITService.Domain.Utilities;
 using ITService.Infrastructure;
+using ITService.UI.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ITService.UI.Areas.Identity.Controllers
 {
@@ -31,17 +35,6 @@ namespace ITService.UI.Areas.Identity.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginCommand command)
         {
-            AddRoleCommand role = new AddRoleCommand();
-            role.Name = "Administrator";
-            AddRoleCommand role1 = new AddRoleCommand();
-            role1.Name = "Moderator";
-            AddRoleCommand role2 = new AddRoleCommand();
-            role2.Name = "User";
-
-            await _mediator.CommandAsync(role);
-            await _mediator.CommandAsync(role1);
-            await _mediator.CommandAsync(role2);
-
             var result = await _mediator.CommandAsync(command);
             if (result.IsFailure)
             {
@@ -60,21 +53,39 @@ namespace ITService.UI.Areas.Identity.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Register(AddUserCommand command)
+        public async Task<IActionResult> Register()
         {
-            //var role = await _mediator.QueryAsync(new SearchRolesQuery()
-            //{
-            //    SearchPhrase = "Admin",
-            //    PageNumber = 1,
-            //    PageSize = 10,
-            //    OrderBy = "Name",
-            //    SortDirection = SortDirection.DESC
-            //});
+            var roles = await _mediator.QueryAsync(new SearchRolesQuery()
+            {
+                PageNumber = 1,
+                PageSize = 10,
+                OrderBy = "Name",
+                SortDirection = SortDirection.DESC
+            });
 
-            //command.RoleId = role.Items.FirstOrDefault(r => r != null).Id;
+            var roleItems = new List<SelectListItem>();
 
-            var result = await _mediator.CommandAsync(command);
+            foreach (var roleItem in roles.Items)
+            {
+                roleItems.Add(new SelectListItem(roleItem.Name, roleItem.Id.ToString()));
+            }
+
+            var user = new AddUserCommand();
+
+            user.RoleId = roles.Items.FirstOrDefault(r => r.Name == Roles.IndividualUserRole).Id;
+
+            var model = new AddUserViewModel()
+            {
+                User = user,
+                Roles = roleItems
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Register(AddUserViewModel model)
+        {
+            var result = await _mediator.CommandAsync(model.User);
 
             if (result.IsFailure)
             {
