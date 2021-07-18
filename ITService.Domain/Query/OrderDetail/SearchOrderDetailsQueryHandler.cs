@@ -33,7 +33,8 @@ namespace ITService.Domain.Query.OrderDetail
                 query.PageNumber,
                 query.PageSize,
                 query.OrderBy,
-                query.SortDirection
+                query.SortDirection,
+                query.OrderId
             );
 
             return new OrderDetailPageResult<OrderDetailDto>(_mapper.Map<List<OrderDetailDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber);

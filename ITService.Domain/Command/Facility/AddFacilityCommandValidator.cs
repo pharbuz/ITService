@@ -28,7 +28,6 @@ namespace ITService.Domain.Command.Facility
                 .MaximumLength(50)
                 .NotEmpty();
             RuleFor(x => x.MapUrl)
-                .MaximumLength(50)
                 .NotEmpty();
         }
     }

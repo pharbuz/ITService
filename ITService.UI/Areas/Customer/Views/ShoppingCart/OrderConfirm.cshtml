@@ -1,4 +1,4 @@
-﻿@model int
+﻿@model Guid
 @{
     ViewData["Title"] = "Order Confirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,6 +10,6 @@
         <img src="https://i.pinimg.com/736x/3c/9e/4b/3c9e4b32b67d641965915ee08db63844.jpg" width="50%" />
     </div>
     <div class="col-12 text-center" style="color:maroon">
-        <h3>Your order number is : @Model</h3>
+        <h3>Your order number is : @Model.ToString()</h3>
     </div>
 </div>

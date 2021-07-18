@@ -80,9 +80,45 @@ namespace ITService.UI.Areas.Customer.Controllers
 
         public async Task<IActionResult> AddToShoppingCart(Guid productId, int count)
         {
+            var searchQuery = new SearchShoppingCartsQuery()
+            {
+                OrderBy = "Count",
+                PageNumber = 1,
+                PageSize = 1000,
+                SortDirection = SortDirection.DESC,
+                SearchPhrase = null,
+                UserId = GetCurrentUserId()
+            };
+
+            var usersShoppingCarts = (await _mediator.QueryAsync(searchQuery)).Items.AsQueryable();
+
             var query = new GetProductQuery(productId);
 
             var queryResult = await _mediator.QueryAsync(query);
+
+            var cart = usersShoppingCarts.FirstOrDefault(c => c.Product.Id == queryResult.Id);
+
+            if (cart != null)
+            {
+                cart.Count += count;
+                var cmd = new EditShoppingCartCommand()
+                {
+                    Count = cart.Count,
+                    Id = cart.Id,
+                    ProductId = cart.ProductId,
+                    UserId = cart.UserId
+                };
+
+                var cmdResult = await _mediator.CommandAsync(cmd);
+
+                if (cmdResult.IsFailure)
+                {
+                    ModelState.PopulateValidation(cmdResult.Errors);
+                    return View("Details");
+                }
+
+                return RedirectToAction("Index", "ShoppingCart");
+            }
 
             var command = new AddShoppingCartCommand()
             {

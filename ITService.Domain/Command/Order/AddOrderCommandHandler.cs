@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ITService.Domain.Repositories;
@@ -31,7 +32,9 @@ namespace ITService.Domain.Command.Order
             await _unitOfWork.OrdersRepository.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
-            return Result.Ok();
+            var res = new Result(true, order.Id.ToString(), Enumerable.Empty<Result.Error>());
+
+            return res;
         }
     }
 }

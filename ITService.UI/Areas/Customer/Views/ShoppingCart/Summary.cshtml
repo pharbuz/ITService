@@ -40,7 +40,7 @@
                                         <label>Phone</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Order.PhoneNumber" type="number" class="form-control" />
+                                        <input asp-for="Order.PhoneNumber" type="number" class="form-control" value="@Model.User.PhoneNumber" />
                                         <span asp-validation-for="Order.PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
                                         <label>Street Address</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Order.Street" type="text" class="form-control" />
+                                        <input asp-for="Order.Street" type="text" class="form-control" value="@Model.User.Street" />
                                         <span asp-validation-for="Order.Street" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                         <label>City</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Order.City" type="text" class="form-control" />
+                                        <input asp-for="Order.City" type="text" class="form-control" value="@Model.User.City" />
                                         <span asp-validation-for="Order.City" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -68,7 +68,7 @@
                                         <label>Postal Code</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="Order.PostalCode" type="text" class="form-control" />
+                                        <input asp-for="Order.PostalCode" type="text" class="form-control" value="@Model.User.PostalCode"/>
                                         <span asp-validation-for="Order.PostalCode" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 col-md-8 pt-2">
-                            <p font-size:14px;">Estimate Arrival Date: @DateTime.Now.AddDays(5).ToShortDateString() - @DateTime.Now.AddDays(10).ToShortDateString()</p>
+                            <p style="font-size: 14px;">Estimate Arrival Date: @DateTime.Now.AddDays(5).ToShortDateString() - @DateTime.Now.AddDays(10).ToShortDateString()</p>
                         </div>
                         <div class="col-12 col-md-4">
                             @{
@@ -122,7 +122,7 @@
                             <script>
                                 document.querySelector(".stripe-button-el").style.display = "none";
                             </script>
-                            <button type="submit" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Pay" value="Place Order" class="btn btn-outline-primary form-control">Order</button>
+                            <button type="submit" value="Place Order" class="btn btn-success form-control">Place Order</button>
                         </div>
                     </div>
                 </div>

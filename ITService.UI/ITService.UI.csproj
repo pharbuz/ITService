@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\images\products\**" />
-    <Content Remove="wwwroot\images\products\**" />
-    <EmbeddedResource Remove="wwwroot\images\products\**" />
-    <None Remove="wwwroot\images\products\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ITService.Infrastructure\ITService.Infrastructure.csproj" />
   </ItemGroup>
 
@@ -22,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\images\products\" />
+    <Folder Include="wwwroot\images\services\" />
   </ItemGroup>
 
 </Project>

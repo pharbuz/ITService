@@ -8,11 +8,16 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ITService.Domain;
+using ITService.Domain.Command.Order;
+using ITService.Domain.Command.OrderDetail;
 using ITService.Domain.Command.ShoppingCart;
 using ITService.Domain.Query.ShoppingCart;
+using ITService.Domain.Query.User;
+using ITService.Domain.Utilities;
 using ITService.Infrastructure;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
+using Stripe;
 
 namespace ITService.UI.Areas.Customer.Controllers
 {
@@ -40,7 +45,7 @@ namespace ITService.UI.Areas.Customer.Controllers
             {
                 SearchPhrase = null,
                 PageNumber = 1,
-                PageSize = 10,
+                PageSize = 1000,
                 OrderBy = "Count",
                 UserId = GetCurrentUserId()
             });
@@ -48,7 +53,7 @@ namespace ITService.UI.Areas.Customer.Controllers
             {
                 Shoppings = shoppings.Items,
                 Count = shoppings.Items.Count,
-                Order = new OrderDto() { OrderTotal = (double)shoppings.Items.Sum(x => x.Product.Price)}
+                Order = new OrderDto() { OrderTotal = (double)shoppings.Items.Sum(x => x.Product.Price * x.Count)}
             };
             return View(svm);
         }
@@ -67,7 +72,8 @@ namespace ITService.UI.Areas.Customer.Controllers
             {
                 Shoppings = shoppings.Items,
                 Count = shoppings.Items.Count,
-                Order = new OrderDto() { OrderTotal = (double)shoppings.Items.Sum(x => x.Product.Price) }
+                Order = new OrderDto() { OrderTotal = (double)shoppings.Items.Sum(x => x.Product.Price * x.Count) },
+                User = await _mediator.QueryAsync(new GetUserQuery(GetCurrentUserId()))
             };
             return View(svm);
         }
@@ -141,9 +147,101 @@ namespace ITService.UI.Areas.Customer.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Pay()
+        [HttpPost]
+        [ActionName("Summary")]
+        public async Task<IActionResult> Pay(string stripeToken)
         {
-            return RedirectToAction("Index");
+            var currentUserId = GetCurrentUserId();
+            var currentUser = await _mediator.QueryAsync(new GetUserQuery(currentUserId));
+            var shoppings = (await _mediator.QueryAsync(new SearchShoppingCartsQuery()
+            {
+                SearchPhrase = null,
+                PageNumber = 1,
+                PageSize = 1000,
+                OrderBy = "Count",
+                UserId = currentUserId
+            })).Items;
+
+            decimal priceTotal = 0m;
+
+            foreach (var shopping in shoppings)
+            {
+                priceTotal += shopping.Product.Price * shopping.Count;
+            }
+
+            var command = new AddOrderCommand()
+            {
+                UserId = currentUserId,
+                OrderDate = DateTime.Now,
+                ShippingDate = DateTime.Now.AddDays(7),
+                OrderTotal = (double) priceTotal,
+                TrackingNumber = null,
+                Carrier = null,
+                OrderStatus = null,
+                PaymentStatus = null,
+                PaymentDate = DateTime.Now,
+                PaymentDueDate = DateTime.Now.AddDays(7),
+                TransactionId = null,
+                Street = currentUser.Street,
+                City = currentUser.City,
+                PhoneNumber = currentUser.PhoneNumber,
+                PostalCode = currentUser.PostalCode
+            };
+
+            if (stripeToken != null)
+            {
+                var options = new ChargeCreateOptions
+                {
+                    Amount = Convert.ToInt32((double) priceTotal * 100),
+                    Currency = "usd",
+                    Description = "Order ID: " + command.TransactionId,
+                    Source = stripeToken
+                };
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+
+                if (charge.Id == null)
+                {
+                    command.PaymentStatus = OrderStatuses.PaymentStatusRejected;
+                    command.OrderStatus = OrderStatuses.StatusPending;
+                }
+                else
+                {
+                    command.TransactionId = charge.Id;
+                }
+
+                if (charge.Status.ToLower() == "succeeded")
+                {
+                    command.PaymentStatus = OrderStatuses.PaymentStatusApproved;
+                    command.OrderStatus = OrderStatuses.StatusApproved;
+                    command.PaymentDate = DateTime.Now;
+                }
+            }
+
+            var result = await _mediator.CommandAsync(command);
+            var orderId = Guid.Parse(result.Message);
+
+            foreach (var cart in shoppings)
+            {
+                var orderDetail = new AddOrderDetailCommand()
+                {
+                    OrderId = orderId,
+                    Price = priceTotal,
+                    ProductId = cart.ProductId,
+                    Quantity = cart.Count
+                };
+
+                await _mediator.CommandAsync(orderDetail);
+
+                await _mediator.CommandAsync(new DeleteShoppingCartCommand(cart.Id));
+            }
+
+            return RedirectToAction("OrderConfirm", "ShoppingCart", new { id = orderId });
+        }
+
+        public async Task<IActionResult> OrderConfirm(Guid id)
+        {
+            return View();
         }
     }
 }

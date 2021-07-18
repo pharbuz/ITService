@@ -7,24 +7,16 @@ namespace ITService.Domain.Command.Order
     {
         public EditOrderCommandValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .NotNull()
-                .NotEqual(Guid.Empty);
             RuleFor(x => x.UserId)
                 .NotEmpty()
                 .NotNull()
                 .NotEqual(Guid.Empty);
             RuleFor(x => x.OrderStatus)
-                .NotEmpty()
-                .NotNull()
                 .MaximumLength(50);
             RuleFor(x => x.OrderDate)
                 .NotEmpty()
                 .NotNull();
             RuleFor(x => x.Carrier)
-                .NotEmpty()
-                .NotNull()
                 .MaximumLength(50);
             RuleFor(x => x.City)
                 .NotEmpty()
@@ -41,8 +33,6 @@ namespace ITService.Domain.Command.Order
                 .NotEmpty()
                 .NotNull();
             RuleFor(x => x.PaymentStatus)
-                .NotEmpty()
-                .NotNull()
                 .MaximumLength(50);
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
@@ -60,12 +50,8 @@ namespace ITService.Domain.Command.Order
                 .NotNull()
                 .MaximumLength(100);
             RuleFor(x => x.TrackingNumber)
-                .NotEmpty()
-                .NotNull()
                 .MaximumLength(100);
             RuleFor(x => x.TransactionId)
-                .NotEmpty()
-                .NotNull()
                 .MaximumLength(100);
         }
     }

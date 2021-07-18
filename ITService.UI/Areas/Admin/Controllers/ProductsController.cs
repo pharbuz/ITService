@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using ITService.Domain;
 using ITService.Domain.Command.Facility;
 using ITService.Domain.Command.Product;
@@ -32,11 +33,13 @@ namespace ITService.UI.Areas.Admin.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IWebHostEnvironment _environment;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IMediator mediator, IWebHostEnvironment environment)
+        public ProductsController(IMediator mediator, IWebHostEnvironment environment, IMapper mapper)
         {
             _mediator = mediator;
             _environment = environment;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -94,48 +97,30 @@ namespace ITService.UI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(AddProductCommand command)
+        public async Task<IActionResult> Add(ProductViewModel viewModel)
         {
-            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
-            {
-                PageNumber = 1,
-                PageSize = 100,
-                SearchPhrase = null,
-                SortDirection = SortDirection.ASC
-            })).Items.AsQueryable();
-
-            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
-            {
-                OrderBy = "Name",
-                PageNumber = 1,
-                PageSize = 100,
-                SearchPhrase = null,
-                SortDirection = SortDirection.ASC
-            })).Items.AsQueryable();
-
-            command.CategoryId = categories.FirstOrDefault().Id;
-            command.ManufacturerId = manufacturers.FirstOrDefault().Id;
+            var model = await GetProductViewModel();
+            model.Product = viewModel.Product;
             string rootPath = _environment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
             if (files.Count > 0)
             {
                 string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(rootPath, @"images\services");
+                var uploads = Path.Combine(rootPath, @"images\products");
                 var extension = Path.GetExtension(files[0].FileName);
 
                 using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                 {
                     files[0].CopyTo(fileStreams);
                 }
-                command.Image = @"\images\products\" + fileName + extension;
+                viewModel.Product.Image = @"\images\products\" + fileName + extension;
             }
 
-            var result = await _mediator.CommandAsync(command);
+            var result = await _mediator.CommandAsync(_mapper.Map<AddProductCommand>(model.Product));
 
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
-                var model = GetProductViewModel();
                 return View(model);
             }
 
@@ -178,33 +163,16 @@ namespace ITService.UI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(EditProductCommand command)
+        public async Task<IActionResult> Update(ProductViewModel viewModel)
         {
-            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
-            {
-                PageNumber = 1,
-                PageSize = 100,
-                SearchPhrase = null,
-                SortDirection = SortDirection.ASC
-            })).Items.AsQueryable();
-
-            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
-            {
-                OrderBy = "Name",
-                PageNumber = 1,
-                PageSize = 100,
-                SearchPhrase = null,
-                SortDirection = SortDirection.ASC
-            })).Items.AsQueryable();
-
-            command.CategoryId = categories.FirstOrDefault().Id;
-            command.ManufacturerId = manufacturers.FirstOrDefault().Id;
+            var model = await GetProductViewModel();
+            model.Product = viewModel.Product;
             string rootPath = _environment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
             if (files.Count > 0)
             {
                 string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(rootPath, @"images\services");
+                var uploads = Path.Combine(rootPath, @"images\products");
                 var extension = Path.GetExtension(files[0].FileName);
 
                 using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
@@ -212,15 +180,15 @@ namespace ITService.UI.Areas.Admin.Controllers
                     files[0].CopyTo(fileStreams);
                 }
 
-                command.Image = @"\images\products\" + fileName + extension;
+                viewModel.Product.Image = @"\images\products\" + fileName + extension;
             }
 
-            var result = await _mediator.CommandAsync(command);
+            var result = await _mediator.CommandAsync(_mapper.Map<EditProductCommand>(viewModel.Product));
 
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
-                return View();
+                return View(model);
             }
 
             return RedirectToAction("Index");

@@ -10,6 +10,7 @@ namespace ITService.UI.ViewModels
     public class ShoppingCartViewModel
     {
         public IEnumerable<ShoppingCartDto> Shoppings { get; set; }
+        public UserDto User { get; set; }
 
         public OrderDto Order { get; set; }
 

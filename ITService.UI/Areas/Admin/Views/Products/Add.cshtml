@@ -4,7 +4,7 @@
 
 }
 
-<form method="post" class="text-danger" asp-area="Admin" asp-controller="Products" asp-action="Add">
+<form method="post" class="text-danger" enctype="multipart/form-data" asp-area="Admin" asp-controller="Products" asp-action="Add">
     <div asp-validation-summary="ModelOnly"></div>
     <div class="row p-3 border">
         <div class="col-12 border-bottom">
@@ -16,7 +16,7 @@
                     <label asp-for="Product.Name"></label>
                 </div>
                 <div class="col-8">
-                    <input name="name" asp-for="Product.Name" class="form-control" />
+                    <input asp-for="Product.Name" class="form-control" />
                     <span asp-validation-for="Product.Name" class="text-danger"></span>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                     <label asp-for="Product.Description"></label>
                 </div>
                 <div class="col-8">
-                    <textarea name="description" asp-for="Product.Description" class="form-control"></textarea>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group row">
@@ -33,7 +33,7 @@
                     <label asp-for="Product.Price"></label>
                 </div>
                 <div class="col-8">
-                    <input name="price" type="number" asp-for="Product.Price" class="form-control"/>
+                    <input type="number" asp-for="Product.Price" class="form-control"/>
                     <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     Category
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Product.CategoryId, Model.Categories, "-Select a category", new { @class = "form-control", @name = "categoryId" })
+                    @Html.DropDownListFor(m => m.Product.CategoryId, Model.Categories, "-Select a category", new { @class = "form-control", @Name = "categoryId" })
                     <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     Cover type
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Product.ManufacturerId, Model.Manufacturers, "-Select a manufacturer", new { @class = "form-control", @name = "manufacturerId" })
+                    @Html.DropDownListFor(m => m.Product.ManufacturerId, Model.Manufacturers, "-Select a manufacturer", new { @class = "form-control", @Name = "manufacturerId" })
                     <span asp-validation-for="Product.ManufacturerId" class="text-danger"></span>
                 </div>
             </div>

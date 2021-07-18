@@ -29,13 +29,17 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<Order> GetAsync(Guid id)
         {
-            var order = await _context.Orders.Include(x => x.OrderDetails).FirstOrDefaultAsync(o => o.Id == id);
+            var order = await _context.Orders
+                .Include(o => o.User)
+                .Include(x => x.OrderDetails)
+                .FirstOrDefaultAsync(o => o.Id == id);
             return order;
         }
 
         public async Task<OrderPageResult<Order>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
             var baseQuery = _context.Orders
+                .Include(o => o.User)
                 .Where(o => searchPhrase == null
                             || o.OrderStatus.ToLower().Contains(searchPhrase.ToLower())
                 );

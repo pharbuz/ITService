@@ -70,7 +70,7 @@ namespace ITService.UI.Areas.Admin.Controllers
                 {
                     files[0].CopyTo(fileStreams);
                 }
-                command.Image = @"\images\products\" + fileName + extension;
+                command.Image = @"\images\services\" + fileName + extension;
             }
 
             var result = await _mediator.CommandAsync(command);
@@ -111,7 +111,7 @@ namespace ITService.UI.Areas.Admin.Controllers
                     files[0].CopyTo(fileStreams);
                 }
 
-                command.Image = @"\images\products\" + fileName + extension;
+                command.Image = @"\images\services\" + fileName + extension;
             }
 
             var result = await _mediator.CommandAsync(command);
