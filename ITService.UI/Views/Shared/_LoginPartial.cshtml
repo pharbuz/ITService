@@ -12,17 +12,12 @@
             </div>
         </li>
         <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
-                <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
-            </form>
+            <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
         <li style="color:white;">
             <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
                 <i class="fas fa-shopping-cart"></i> &nbsp;
             </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
     }
     else

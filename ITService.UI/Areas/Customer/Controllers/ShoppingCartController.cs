@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace ITService.UI.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [ServiceFilter(typeof(JwtAuthFilter))]
     [Authorize]
+    [ServiceFilter(typeof(JwtAuthFilter))]
     public class ShoppingCartController : Controller
     {
         public IActionResult Index()

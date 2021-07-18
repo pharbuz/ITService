@@ -32,7 +32,7 @@ namespace ITService.Domain.Query.Facility
                 query.SearchPhrase,
                 query.PageNumber,
                 query.PageSize,
-                query.FacilityBy,
+                query.OrderBy,
                 query.SortDirection
             );
 

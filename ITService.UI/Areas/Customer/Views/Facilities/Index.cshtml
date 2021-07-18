@@ -1,12 +1,12 @@
 ﻿
-@model IEnumerable<ITService.Domain.Query.Dto.FacilityDto>
+@model ITService.Domain.Query.Dto.Pagination.PageResults.FacilityPageResult<ITService.Domain.Query.Dto.FacilityDto>
 @{
     ViewData["Title"] = "Facilities";
 }
 <h1 style="text-align:center;margin-bottom:40px;">Our facilities</h1>
 
 <div class="row pb-3 backgroundWhite">
-    @foreach (var facility in Model)
+    @foreach (var facility in Model.Items)
     {
         <div class="col-lg-12 col-md-12 col-sm-12 container rounded ">
             <div class="row">

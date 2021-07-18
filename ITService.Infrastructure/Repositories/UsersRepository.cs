@@ -115,7 +115,8 @@ namespace ITService.Infrastructure.Repositories
             {
                 new Claim(ClaimTypes.Name, user.Login),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.Name)
             };
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.JwtKey));
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -138,7 +139,7 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<string> LoginAsync(string username, string password, bool rememberMe)
         {
-            var userToBeVerified = await _context.Users.FirstOrDefaultAsync(u => u.Login.Equals(username));
+            var userToBeVerified = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Login.Equals(username));
             if (userToBeVerified == null)
             {
                 return null;

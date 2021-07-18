@@ -16,10 +16,14 @@ namespace ITService.Infrastructure.Repositories
         {
             _context = context;
             CategoriesRepository = new CategoriesRepository(context);
+            FacilitiesRepository = new FacilitiesRepository(context);
+            ManufacturersRepository = new ManufacturersRepository(context);
             OrdersRepository = new OrdersRepository(context);
             OrderDetailsRepository = new OrderDetailsRepository(context);
             ProductsRepository = new ProductsRepository(context);
             RolesRepository = new RolesRepository(context);
+            ServicesRepository = new ServicesRepository(context);
+            ShoppingCartsRepository = new ShoppingCartsRepository(context);
             TokenRepository = new TokenRepository(contextAccessor, jwtOptions, distributedCache);
             UsersRepository = new UsersRepository(context, hasher, jwtOptions, contextAccessor, TokenRepository);
         }

@@ -29,7 +29,12 @@ namespace ITService.UI.Areas.Identity.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
 
         [HttpPost]
@@ -50,36 +55,41 @@ namespace ITService.UI.Areas.Identity.Controllers
         {
             await _mediator.CommandAsync(new LogoutCommand());
 
-            return RedirectToAction("Index", "Home", new { area = "Customer"});
+            return RedirectToAction("Login", "Account", new { area = "Identity"});
         }
 
         public async Task<IActionResult> Register()
         {
-            var roles = await _mediator.QueryAsync(new SearchRolesQuery()
+            if (!User.Identity.IsAuthenticated)
             {
-                PageNumber = 1,
-                PageSize = 10,
-                OrderBy = "Name",
-                SortDirection = SortDirection.DESC
-            });
+                var roles = await _mediator.QueryAsync(new SearchRolesQuery()
+                {
+                    PageNumber = 1,
+                    PageSize = 10,
+                    OrderBy = "Name",
+                    SortDirection = SortDirection.DESC
+                });
 
-            var roleItems = new List<SelectListItem>();
+                var roleItems = new List<SelectListItem>();
 
-            foreach (var roleItem in roles.Items)
-            {
-                roleItems.Add(new SelectListItem(roleItem.Name, roleItem.Id.ToString()));
+                foreach (var roleItem in roles.Items)
+                {
+                    roleItems.Add(new SelectListItem(roleItem.Name, roleItem.Id.ToString()));
+                }
+
+                var user = new AddUserCommand();
+
+                user.RoleId = roles.Items.FirstOrDefault(r => r.Name == Roles.IndividualUserRole).Id;
+
+                var model = new AddUserViewModel()
+                {
+                    User = user,
+                    Roles = roleItems
+                };
+                return View(model);
             }
 
-            var user = new AddUserCommand();
-
-            user.RoleId = roles.Items.FirstOrDefault(r => r.Name == Roles.IndividualUserRole).Id;
-
-            var model = new AddUserViewModel()
-            {
-                User = user,
-                Roles = roleItems
-            };
-            return View(model);
+            return RedirectToAction("Login", "Account", new { area = "Identity" });
         }
 
         [HttpPost]

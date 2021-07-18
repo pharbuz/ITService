@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace ITService.UI.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [ServiceFilter(typeof(JwtAuthFilter))]
     [Authorize]
+    [ServiceFilter(typeof(JwtAuthFilter))]
     public class HomeController : Controller
     {
         private readonly IMediator _mediator;
@@ -42,9 +42,19 @@ namespace ITService.UI.Areas.Customer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Search()
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchPhrase)
         {
-            return View();
+            var query = new SearchProductsQuery()
+            {
+                SearchPhrase = searchPhrase,
+                PageNumber = 1,
+                PageSize = 10,
+                OrderBy = "Name",
+                SortDirection = SortDirection.ASC
+            };
+            var result = await _mediator.QueryAsync(query);
+            return View("Index", result);
         }
     }
 }

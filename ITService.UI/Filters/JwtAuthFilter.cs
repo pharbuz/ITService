@@ -35,7 +35,7 @@ namespace ITService.UI.Filters
                 context.HttpContext.Response.Cookies.Delete("Authorization");
                 CookieBuilder cookie = CreateAuthorizationCookie(-60);
                 context.HttpContext.Response.Cookies.Append("Authorization", "", cookie.Build(context.HttpContext));
-                context.HttpContext.Response.Redirect("/User/Login");
+                context.HttpContext.Response.Redirect("/Identity/Account/Login");
             }
 
         }
