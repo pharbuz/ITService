@@ -122,7 +122,7 @@
                             <script>
                                 document.querySelector(".stripe-button-el").style.display = "none";
                             </script>
-                            <button type="submit" value="Place Order" class="btn btn-outline-primary form-control">Order</button>
+                            <button type="submit" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Pay" value="Place Order" class="btn btn-outline-primary form-control">Order</button>
                         </div>
                     </div>
                 </div>

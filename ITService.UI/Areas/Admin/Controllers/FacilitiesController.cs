@@ -3,8 +3,14 @@ using ITService.Domain.Query.Dto.Pagination.PageResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ITService.Domain;
+using ITService.Domain.Command.Facility;
+using ITService.Domain.Enums;
+using ITService.Domain.Query.Facility;
+using ITService.Infrastructure;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,32 +21,87 @@ namespace ITService.UI.Areas.Admin.Controllers
     [Authorize]
     public class FacilitiesController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
+        private readonly IMediator _mediator;
+
+        public FacilitiesController(IMediator mediator)
         {
-            var items = new List<FacilityDto>() { new FacilityDto() { Id = Guid.NewGuid(),
-                Name = "Service4Now Warszawa", City="Warszawa", OpenedSaturday="8:00-16:00", 
-                OpenedWeek = "8:00-12:00", PhoneNumber="432642355", PostalCode="39-127", StreetAdress="Malinowa 2/5",
-                MapUrl= "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20502.376814732215!2d21.978487029171365!3d50.033897632869156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x3bec5584cbe783b7!2zR2FsZXJpYSBoYW5kbG93YSDigJ5QYXNhxbwgUnplc3rDs3figJ0!5e0!3m2!1spl!2spl!4v1626184518901!5m2!1spl!2spl" } };
-            var obj = new FacilityPageResult<FacilityDto>(items, 5, 5, 5);
-            return View(obj);
-        }
-        [HttpGet]
-        public IActionResult Add()
-        {
-            return View();
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Index()
+        {
+            var query = new SearchFacilitiesQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            };
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Add(AddFacilityCommand command)
         {
-            return View();
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var query = new GetFacilityQuery(id);
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(EditFacilityCommand command)
+        {
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteFacilityCommand(id);
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

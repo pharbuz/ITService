@@ -140,5 +140,10 @@ namespace ITService.UI.Areas.Customer.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> Pay()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

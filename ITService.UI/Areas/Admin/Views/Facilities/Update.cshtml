@@ -1,10 +1,10 @@
-﻿@model ITService.Domain.Command.Facility.EditFacilityCommand
+﻿@model ITService.Domain.Query.Dto.FacilityDto
 @{
     ViewData["Title"] = "Edit facility";
 
 }
 
-<form method="post">
+<form method="post" asp-action="Update" asp-controller="Facilities">
     <input asp-for="Id" hidden />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row p-3 border">
