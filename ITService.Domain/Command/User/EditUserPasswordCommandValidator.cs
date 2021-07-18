@@ -25,7 +25,10 @@ namespace ITService.Domain.Command.User
                 {
                     if (x != null)
                     {
-                        if (!_hasher.HashPassword(_user, x).Equals(_user.Password))
+                        string passwordInDatabase = _user.Password;
+                        string providedPassword = y.InstanceToValidate.OldPassword;
+                        var result = _hasher.VerifyHashedPassword(_user, passwordInDatabase, providedPassword);
+                        if (result != PasswordVerificationResult.Success)
                         {
                             y.AddFailure("You have entered a wrong password.");
                         }
@@ -38,7 +41,7 @@ namespace ITService.Domain.Command.User
                 {
                     if (a != null)
                     {
-                        if (a.Equals(b.InstanceToValidate.ConfirmNewPassword))
+                        if (!a.Equals(b.InstanceToValidate.ConfirmNewPassword))
                         {
                             b.AddFailure("Passwords must be the same!");
                         }
