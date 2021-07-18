@@ -45,6 +45,10 @@ namespace ITService.Infrastructure.Repositories
         public async Task<ProductPageResult<Product>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
         {
             var baseQuery = _context.Products
+                .Include(x => x.Manufacturer)
+                .Include(x => x.OrderDetails)
+                .Include(x => x.ShoppingCarts)
+                .Include(x => x.Category)
                 .Where(o => searchPhrase == null
                             || o.Name.ToLower().Contains(searchPhrase.ToLower())
                             || o.Price.ToString().Contains(searchPhrase.ToLower())

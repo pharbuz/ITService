@@ -5,6 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ITService.Domain;
+using ITService.Domain.Command.Facility;
+using ITService.Domain.Command.Manufacturer;
+using ITService.Domain.Enums;
+using ITService.Domain.Query.Category;
+using ITService.Domain.Query.Facility;
+using ITService.Domain.Query.Manufacturer;
+using ITService.Infrastructure;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,29 +23,87 @@ namespace ITService.UI.Areas.Admin.Controllers
     [Authorize]
     public class ManufacturersController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
+        private readonly IMediator _mediator;
+
+        public ManufacturersController(IMediator mediator)
         {
-            var items = new List<ManufacturerDto>() { new ManufacturerDto() { Id = Guid.NewGuid(), Name = "Amd" }, new ManufacturerDto() { Id = Guid.NewGuid(), Name = "Intel" } };
-            var obj = new ManufacturerPageResult<ManufacturerDto>(items, 5, 5, 5);
-            return View(obj);
-        }
-        [HttpGet]
-        public IActionResult Add()
-        {
-            return View();
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Index()
+        {
+            var query = new SearchManufacturersQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            };
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Add(AddManufacturerCommand command)
         {
-            return View();
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var query = new GetManufacturerQuery(id);
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(EditManufacturerCommand command)
+        {
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteManufacturerCommand(id);
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -4,7 +4,7 @@
 
 }
 
-<form method="post">
+<form method="post" class="text-danger" asp-area="Admin" asp-controller="Products" asp-action="Update">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row p-3 border">
         <div class="col-12 border-bottom">
@@ -62,7 +62,7 @@
                 <div class="col-8 offset-4">
                     <div class="row">
                         <div class="col">
-                            <button type="submit" class="btn btn-outline-primary form-control">Create</button>
+                            <button type="submit" onclick="return validateInput()" class="btn btn-outline-primary form-control">Create</button>
                         </div>
                         <div class="col">
                             <a asp-action="Index" class="btn btn-outline-secondary form-control">Back</a>
@@ -81,3 +81,14 @@
     <partial name="_ValidationScriptsPartial" />
 
 }
+<script>
+    function validateInput() {
+        if (document.getElementById("uploadBox").value == "") {
+
+            return false;
+
+        }
+        return true;
+    }
+
+</script>

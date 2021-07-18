@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ITService.Domain;
+using ITService.Domain.Enums;
+using ITService.Domain.Query.Service;
+using ITService.Infrastructure;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 
@@ -19,33 +23,40 @@ namespace ITService.UI.Areas.Admin.Controllers
     public class ServicesController : Controller
     {
         private readonly IWebHostEnvironment _hostEnviroment;
-        public ServicesController(IWebHostEnvironment hostEnviroment)
+        private readonly IMediator _mediator;
+
+        public ServicesController(IWebHostEnvironment hostEnviroment, IMediator mediator)
         {
             _hostEnviroment = hostEnviroment;
+            _mediator = mediator;
         }
+
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var items = new List<ServiceDto>() 
-            { new ServiceDto() { Id = Guid.NewGuid(), 
-                Name = "System instalation", EstimatedServicePrice=20,  
-                Description= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " }, new ServiceDto() { Id = Guid.NewGuid(), Name = "Graphic Card" } };
-            var obj = new ServicePageResult<ServiceDto>(items, 5, 5, 5);
-            return View(obj);
+            var query = new SearchServicesQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            };
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
         }
 
         [HttpGet]
         public IActionResult Add()
         {
-            
             return View();
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(AddServiceCommand command)
+        public async Task<IActionResult> Add(AddServiceCommand command)
         {
             string rootPath = _hostEnviroment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
@@ -60,39 +71,73 @@ namespace ITService.UI.Areas.Admin.Controllers
                     files[0].CopyTo(fileStreams);
                 }
                 command.Image = @"\images\products\" + fileName + extension;
-
-
-
-
-                var items = new List<ServiceDto>()
-            { new ServiceDto() { Id = Guid.NewGuid(),
-                Name = "System instalation", EstimatedServicePrice=20,
-                Description= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. " }, new ServiceDto() { Id = Guid.NewGuid(), Name = "Graphic Card" } };
-                var obj = new ServicePageResult<ServiceDto>(items, 5, 5, 5);
-                return View(nameof(Index), items);
-
             }
-            return View(command);
 
+            var result = await _mediator.CommandAsync(command);
 
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
 
-
-
-         
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Update(Guid id)
         {
-            return View();
+            var query = new GetServiceQuery(id);
+
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
         }
 
         [HttpPost]
-        public IActionResult Delete(Guid id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(EditServiceCommand command)
         {
-            return View();
+            string rootPath = _hostEnviroment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            if (files.Count > 0)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(rootPath, @"images\services");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStreams);
+                }
+
+                command.Image = @"\images\products\" + fileName + extension;
+            }
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteServiceCommand(id);
 
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

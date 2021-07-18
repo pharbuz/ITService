@@ -6,10 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ITService.Domain;
+using ITService.Domain.Command.Facility;
+using ITService.Domain.Command.Product;
+using ITService.Domain.Enums;
+using ITService.Domain.Query.Category;
+using ITService.Domain.Query.Facility;
+using ITService.Domain.Query.Manufacturer;
+using ITService.Domain.Query.Product;
+using ITService.Infrastructure;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace ITService.UI.Areas.Admin.Controllers
 {
@@ -18,50 +30,177 @@ namespace ITService.UI.Areas.Admin.Controllers
     [Authorize]
     public class ProductsController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
-        {
-            var items = new List<ProductDto>() { new ProductDto() { Id = Guid.NewGuid(), Name = "Ryzen 5", Price=220 , Category=new CategoryDto() { Name="Karta Graficzna" }, Manufacturer= new ManufacturerDto() { Name="Intel" } }, new ProductDto() { Id = Guid.NewGuid(), Name = "Gtx 1660", Price = 220,  Category = new CategoryDto() { Name = "Karta Graficzna" }, Manufacturer = new ManufacturerDto() { Name = "Intel" } } };
-            var obj = new ProductPageResult<ProductDto>(items, 5, 5, 5);
-            return View(obj);
-        }
-        [HttpGet]
-        public IActionResult Add()
-        {
-            ProductViewModel productVM = new ProductViewModel()
-            {
-                Product = new ProductDto(),
-                Categories = new List<CategoryDto>() { new CategoryDto() { Id=Guid.NewGuid(), Name="Karta Graficzna" } }.Select(i => new SelectListItem { Text = i.Name, Value = i.Id.ToString() }),
-                Manufacturers = new List<ManufacturerDto>() { new ManufacturerDto() { Id = Guid.NewGuid(), Name = "Intel" } }.Select(i => new SelectListItem { Text = i.Name, Value = i.Id.ToString() }),
+        private readonly IMediator _mediator;
+        private readonly IWebHostEnvironment _environment;
 
-
-            };
-            
-            return View(productVM);
+        public ProductsController(IMediator mediator, IWebHostEnvironment environment)
+        {
+            _mediator = mediator;
+            _environment = environment;
         }
 
         [HttpGet]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Index()
         {
-            ProductViewModel productVM = new ProductViewModel()
+            var query = new SearchProductsQuery()
             {
-                Product = new ProductDto(),
-                Categories = new List<CategoryDto>() { new CategoryDto() { Id = Guid.NewGuid(), Name = "Karta Graficzna" } }.Select(i => new SelectListItem { Text = i.Name, Value = i.Id.ToString() }),
-                Manufacturers = new List<ManufacturerDto>() { new ManufacturerDto() { Id = Guid.NewGuid(), Name = "Intel" } }.Select(i => new SelectListItem { Text = i.Name, Value = i.Id.ToString() }),
-
-
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
             };
 
-            return View(productVM);
-            return View();
+            var result = await _mediator.QueryAsync(query);
+
+            return View(result);
+        }
+
+        private async Task<ProductViewModel> GetProductViewModel()
+        {
+            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
+            {
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var model = new ProductViewModel()
+            {
+                Product = new ProductDto(),
+                Categories = categories.Select(s => new SelectListItem(s.Name, s.Id.ToString())),
+                Manufacturers = manufacturers.Select(s => new SelectListItem(s.Name, s.Id.ToString()))
+            };
+            return model;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var model = await GetProductViewModel();
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Delete(Guid id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(AddProductCommand command)
         {
-            return View();
+            string rootPath = _environment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            if (files.Count > 0)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(rootPath, @"images\services");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStreams);
+                }
+                command.Image = @"\images\products\" + fileName + extension;
+            }
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                var model = await GetProductViewModel();
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var query = new GetProductQuery(id);
 
+            var result = await _mediator.QueryAsync(query);
+
+            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
+            {
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var model = new ProductViewModel()
+            {
+                Product = result,
+                Categories = categories.Select(s => new SelectListItem(s.Name, s.Id.ToString())),
+                Manufacturers = manufacturers.Select(s => new SelectListItem(s.Name, s.Id.ToString()))
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(EditProductCommand command)
+        {
+            string rootPath = _environment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            if (files.Count > 0)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(rootPath, @"images\services");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStreams);
+                }
+
+                command.Image = @"\images\products\" + fileName + extension;
+            }
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteProductCommand(id);
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
