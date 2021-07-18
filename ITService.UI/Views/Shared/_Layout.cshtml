@@ -21,7 +21,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Customer" asp-controller="Home" style="color:firebrick" asp-action="Index">Service4Now</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link text-light" asp-area="Customer" asp-controller="Home" style="color:firebrick" asp-action="Index">Service4Now</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-light" asp-area="Customer" asp-controller="Facilities" style="color:firebrick" asp-action="Index">Service4Now</a>
+                            }
                         </li>
                         <li>
                             <form class="form-inline" method="post">

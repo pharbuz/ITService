@@ -67,6 +67,11 @@ namespace ITService.UI
                         }
                     };
                 });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+            });
             services.AddSingleton(jwtOptions);
 
             services.AddDistributedRedisCache(r => { r.Configuration = Configuration["redis:connectionString"]; });

@@ -30,9 +30,11 @@ namespace ITService.Domain.Command.User
                 return Result.Fail("User does not exist.");
             }
 
-            _mapper.Map(command, user);
-
-            await _unitOfWork.UsersRepository.UpdateAsync(user);
+            user.PhoneNumber = command.PhoneNumber;
+            user.Street = command.Street;
+            user.City = command.City;
+            user.PostalCode = command.PostalCode;
+            user.LockoutEnd = command.LockoutEnd;
 
             await _unitOfWork.CommitAsync();
 

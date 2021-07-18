@@ -36,8 +36,6 @@ namespace ITService.Domain.Command.User
 
             user.Password = _hasher.HashPassword(user, command.NewPassword);
 
-            await _unitOfWork.UsersRepository.UpdateAsync(user);
-
             await _unitOfWork.CommitAsync();
 
             return Result.Ok();

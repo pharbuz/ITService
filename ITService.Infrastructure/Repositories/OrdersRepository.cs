@@ -29,7 +29,7 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<Order> GetAsync(Guid id)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            var order = await _context.Orders.Include(x => x.OrderDetails).FirstOrDefaultAsync(o => o.Id == id);
             return order;
         }
 

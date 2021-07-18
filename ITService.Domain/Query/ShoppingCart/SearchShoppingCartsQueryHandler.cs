@@ -33,7 +33,8 @@ namespace ITService.Domain.Query.ShoppingCart
                 query.PageNumber,
                 query.PageSize,
                 query.OrderBy,
-                query.SortDirection
+                query.SortDirection,
+                query.UserId
             );
 
             return new ShoppingCartPageResult<ShoppingCartDto>(_mapper.Map<List<ShoppingCartDto>>(result.Items), result.TotalItemsCount, query.PageSize, query.PageNumber);

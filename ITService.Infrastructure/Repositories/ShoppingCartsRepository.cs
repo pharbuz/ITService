@@ -19,7 +19,10 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<ShoppingCart> GetAsync(Guid id)
         {
-            return await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.ShoppingCarts
+                .Include(x => x.User)
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task DeleteAsync(ShoppingCart entity)
@@ -37,11 +40,14 @@ namespace ITService.Infrastructure.Repositories
             _context.ShoppingCarts.Update(entity);
         }
 
-        public async Task<ShoppingCartPageResult<ShoppingCart>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection)
+        public async Task<ShoppingCartPageResult<ShoppingCart>> SearchAsync(string searchPhrase, int pageNumber, int pageSize, string orderBy, SortDirection sortDirection, Guid userId)
         {
             var baseQuery = _context.ShoppingCarts
-                .Where(o => searchPhrase == null
-                            || o.Count.ToString().Contains(searchPhrase.ToLower())
+                .Include(x => x.User)
+                .Include(x => x.Product)
+                .Where(o => (searchPhrase == null
+                            || o.Count.ToString().Contains(searchPhrase.ToLower()))
+                && o.UserId == userId
                 );
             if (!string.IsNullOrEmpty(orderBy))
             {

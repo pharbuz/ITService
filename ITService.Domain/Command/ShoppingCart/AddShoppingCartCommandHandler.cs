@@ -25,7 +25,12 @@ namespace ITService.Domain.Command.ShoppingCart
                 return Result.Fail(validationResult);
             }
 
-            var shoppingCart = _mapper.Map<Entities.ShoppingCart>(command);
+            var shoppingCart = new Entities.ShoppingCart()
+            {
+                Count = command.Count,
+                ProductId = command.ProductId,
+                UserId = command.UserId
+            };
             shoppingCart.Id = Guid.NewGuid();
 
             await _unitOfWork.ShoppingCartsRepository.AddAsync(shoppingCart);

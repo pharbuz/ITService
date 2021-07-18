@@ -48,7 +48,7 @@
                         <a asp-action="Index" class="btn btn-outline-secondary btn-square btn-lg form-control" style="height:50px;">Back</a>
                     </div>
                     <div class="col-12 col-md-6 pb-1">
-                        <button type="submit" value="Add to Cart" class="btn btn-outline-primary btn-square btn-lg form-control" style="height:50px;">Add to card</button>
+                        <button asp-action="AddToShoppingCart" asp-controller="Home" asp-area="Customer" asp-route-productId="@Model.ProductId" asp-route-count="@Model.Count" type="submit" value="Add to Cart" class="btn btn-outline-primary btn-square btn-lg form-control" style="height:50px;">Add to card</button>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ITService.Domain;
 using ITService.Domain.Command.User;
+using ITService.Domain.Query.User;
 using ITService.Domain.Repositories;
 using ITService.Infrastructure;
 using ITService.UI.Filters;
@@ -46,14 +47,12 @@ namespace ITService.UI.Areas.Customer.Controllers
             return View();
         }
 
-        public IActionResult ChangeDetails()
+        public async Task<IActionResult> ChangeDetails()
         {
-            var command = new EditUserDetailsCommand()
-            {
-                Id = Guid.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value)
-            };
-
-            return View(command);
+            var query = await _mediator.QueryAsync(new GetUserQuery(Guid.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value)));
+            
+            return View(query);
         }
 
         [HttpPost]

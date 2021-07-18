@@ -19,7 +19,12 @@ namespace ITService.Infrastructure.Repositories
 
         public async Task<Product> GetAsync(Guid id)
         {
-            return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Products
+                .Include(x => x.Manufacturer)
+                .Include(x => x.OrderDetails)
+                .Include(x => x.ShoppingCarts)
+                .Include(x => x.Category)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task DeleteAsync(Product entity)

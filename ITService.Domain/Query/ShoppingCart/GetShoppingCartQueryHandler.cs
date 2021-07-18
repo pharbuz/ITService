@@ -19,14 +19,14 @@ namespace ITService.Domain.Query.ShoppingCart
 
         public async Task<ShoppingCartDto> HandleAsync(GetShoppingCartQuery query)
         {
-            var ShoppingCart = await _unitOfWork.ShoppingCartsRepository.GetAsync(query.Id);
+            var shoppingCart = await _unitOfWork.ShoppingCartsRepository.GetAsync(query.Id);
 
-            if (ShoppingCart == null)
+            if (shoppingCart == null)
             {
                 throw new NullReferenceException("ShoppingCart does not exist!");
             }
 
-            return _mapper.Map<ShoppingCartDto>(ShoppingCart);
+            return _mapper.Map<ShoppingCartDto>(shoppingCart);
         }
     }
 }

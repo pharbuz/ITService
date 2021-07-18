@@ -43,18 +43,18 @@
                                     </div>
                                     <div class="col-6 col-sm-4 col-lg-6">
                                         <div class="float-right mx-1">
-                                            <a asp-action="more" asp-route-Id="@item.Id"  class="btn btn-outline-primary">
+                                            <a asp-action="More" asp-route-id="@item.Id"  class="btn btn-outline-primary">
                                                 <i class="fas fa-plus"></i>
                                             </a>
                                         </div>
                                         <div class="float-right mx-1">
-                                            <a asp-action="less" asp-route-Id="@item.Id"  class="btn btn-outline-danger">
+                                            <a asp-action="Less" asp-route-id="@item.Id"  class="btn btn-outline-danger">
                                                 <i class="fas fa-minus"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col-2 col-sm-4 col-lg-2 text-right">
-                                        <a asp-action="remove" asp-route-Id="@item.Id" class="btn btn-outline-danger">
+                                        <a asp-action="Remove" asp-route-id="@item.Id" class="btn btn-outline-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -82,7 +82,7 @@
 
                             <div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
 
-                                <a asp-action="Summary" asp-area="Customer" asp-controller="Cart" class="btn btn-outline-primary form-control">Summary</a>
+                                <a asp-action="Summary" asp-area="Customer" asp-controller="ShoppingCart" class="btn btn-outline-primary form-control">Summary</a>
                             </div>  
                         </div>
                     </div>

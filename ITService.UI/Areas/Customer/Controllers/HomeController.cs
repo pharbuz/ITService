@@ -2,12 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ITService.Domain;
+using ITService.Domain.Command.ShoppingCart;
 using ITService.Domain.Enums;
+using ITService.Domain.Query.Order;
+using ITService.Domain.Query.OrderDetail;
 using ITService.Domain.Query.Product;
+using ITService.Domain.Query.ShoppingCart;
+using ITService.Infrastructure;
 using ITService.UI.Filters;
+using ITService.UI.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITService.UI.Areas.Customer.Controllers
 {
@@ -21,6 +29,12 @@ namespace ITService.UI.Areas.Customer.Controllers
         public HomeController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            return Guid.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
 
         public async Task<IActionResult> Index()
@@ -37,9 +51,16 @@ namespace ITService.UI.Areas.Customer.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(Guid productId)
         {
-            return View();
+            var product = await _mediator.QueryAsync(new GetProductQuery(productId));
+            var command = new AddShoppingCartCommand()
+            {
+                Product = product,
+                ProductId = productId,
+                UserId = GetCurrentUserId()
+            };
+            return View(command);
         }
 
         [HttpPost]
@@ -55,6 +76,31 @@ namespace ITService.UI.Areas.Customer.Controllers
             };
             var result = await _mediator.QueryAsync(query);
             return View("Index", result);
+        }
+
+        public async Task<IActionResult> AddToShoppingCart(Guid productId, int count)
+        {
+            var query = new GetProductQuery(productId);
+
+            var queryResult = await _mediator.QueryAsync(query);
+
+            var command = new AddShoppingCartCommand()
+            {
+                UserId = GetCurrentUserId(),
+                ProductId = productId,
+                Count = count,
+                Product = queryResult
+            };
+
+            var result = await _mediator.CommandAsync(command);
+
+            if (result.IsFailure)
+            {
+                ModelState.PopulateValidation(result.Errors);
+                return View("Details");
+            }
+
+            return RedirectToAction("Index", "ShoppingCart");
         }
     }
 }
