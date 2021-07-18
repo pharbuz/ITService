@@ -96,6 +96,25 @@ namespace ITService.UI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(AddProductCommand command)
         {
+            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
+            {
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            command.CategoryId = categories.FirstOrDefault().Id;
+            command.ManufacturerId = manufacturers.FirstOrDefault().Id;
             string rootPath = _environment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
             if (files.Count > 0)
@@ -116,7 +135,7 @@ namespace ITService.UI.Areas.Admin.Controllers
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
-                var model = await GetProductViewModel();
+                var model = GetProductViewModel();
                 return View(model);
             }
 
@@ -161,6 +180,25 @@ namespace ITService.UI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(EditProductCommand command)
         {
+            var categories = (await _mediator.QueryAsync(new SearchCategoriesQuery()
+            {
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            var manufacturers = (await _mediator.QueryAsync(new SearchManufacturersQuery()
+            {
+                OrderBy = "Name",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            })).Items.AsQueryable();
+
+            command.CategoryId = categories.FirstOrDefault().Id;
+            command.ManufacturerId = manufacturers.FirstOrDefault().Id;
             string rootPath = _environment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
             if (files.Count > 0)
