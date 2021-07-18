@@ -33,8 +33,8 @@
                     <label asp-for="Product.Price"></label>
                 </div>
                 <div class="col-8">
-                    <input type="text" asp-for="Product.Price" class="form-control"></input>
-                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                    <input type="number" asp-for="@Model.Product.Price" class="form-control"></input>
+                    <span name="price" asp-validation-for="@Model.Product.Price" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
@@ -42,8 +42,8 @@
                     Category
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Product.CategoryId, Model.Categories, "-Select a category", new { @class = "form-control", @name = "categoryId" })
-                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                    @Html.DropDownListFor(m => Model.Product.CategoryId, Model.Categories, "-Select a category", new { @class = "form-control", @name = "categoryId" })
+                    <span asp-validation-for="@Model.Product.Price" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
@@ -51,8 +51,8 @@
                     Cover type
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m => m.Product.ManufacturerId, Model.Manufacturers, "-Select a manufacturer", new { @class = "form-control", @name = "manufacturerId" })
-                    <span asp-validation-for="Product.ManufacturerId" class="text-danger"></span>
+                    @Html.DropDownListFor(m => Model.Product.ManufacturerId, Model.Manufacturers, "-Select a manufacturer", new { @class = "form-control", @name = "manufacturerId" })
+                    <span asp-validation-for="@Model.Product.ManufacturerId" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
