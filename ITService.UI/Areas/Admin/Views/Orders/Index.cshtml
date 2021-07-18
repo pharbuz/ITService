@@ -16,19 +16,19 @@
         </div>
         <div class="p-2">
             <ul class="list-group list-group-horizontal-sm">
-                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="inprocess">
                     <li class="list-group-item">Order inprocess</li>
                 </a>
-                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="Order pending">
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Order pending">
                     <li class="list-group-item ">Order pending</li>
                 </a>
-                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="completed">
                     <li class="list-group-item ">Order completed</li>
                 </a>
-                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="rejected">
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="rejected">
                     <li class="list-group-item ">Order rejected/refunded</li>
                 </a>
-                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="all">
                     <li class="list-group-item">All orders</li>
                 </a>
             </ul>

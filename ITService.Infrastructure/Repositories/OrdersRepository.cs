@@ -37,34 +37,16 @@ namespace ITService.Infrastructure.Repositories
         {
             var baseQuery = _context.Orders
                 .Where(o => searchPhrase == null
-                            || o.OrderDate.ToString().Contains(searchPhrase.ToLower())
-                            || o.ShippingDate.ToString().Contains(searchPhrase.ToLower())
-                            || o.OrderTotal.ToString().Contains(searchPhrase.ToLower())
-                            || o.TrackingNumber.ToLower().Contains(searchPhrase.ToLower())
-                            || o.Carrier.ToLower().Contains(searchPhrase.ToLower())
                             || o.OrderStatus.ToLower().Contains(searchPhrase.ToLower())
-                            || o.PaymentStatus.ToLower().Contains(searchPhrase.ToLower())
-                            || o.PaymentDate.ToString().Contains(searchPhrase.ToLower())
-                            || o.PaymentDueDate.ToString().Contains(searchPhrase.ToLower())
-                            || o.TransactionId.ToString().Contains(searchPhrase.ToLower())
-                            || o.Street.ToLower().Contains(searchPhrase.ToLower())
-                            || o.City.ToLower().Contains(searchPhrase.ToLower())
-                            || o.PostalCode.ToLower().Contains(searchPhrase.ToLower())
-                            || o.PhoneNumber.ToLower().Contains(searchPhrase.ToLower())
-                            );
+                );
             if (!string.IsNullOrEmpty(orderBy))
             {
                 var columnSelectors = new Dictionary<string, Expression<Func<Order, object>>>()
                 {
-                    {nameof(Order.OrderDate), o => o.OrderDate},
-                    {nameof(Order.ShippingDate), o => o.ShippingDate},
-                    {nameof(Order.OrderTotal), o => o.OrderTotal},
                     {nameof(Order.TrackingNumber), o => o.TrackingNumber},
                     {nameof(Order.Carrier), o => o.Carrier},
                     {nameof(Order.OrderStatus), o => o.OrderStatus},
                     {nameof(Order.PaymentStatus), o => o.PaymentStatus},
-                    {nameof(Order.PaymentDate), o => o.PaymentDate},
-                    {nameof(Order.PaymentDueDate), o => o.PaymentDueDate},
                     {nameof(Order.TransactionId), o => o.TransactionId},
                     {nameof(Order.Street), o => o.Street},
                     {nameof(Order.City), o => o.City},
@@ -80,7 +62,7 @@ namespace ITService.Infrastructure.Repositories
                 }
                 else
                 {
-                    selectedColumn = columnSelectors["OrderDate"];
+                    selectedColumn = columnSelectors["TrackingNumber"];
                 }
 
                 baseQuery = sortDirection == SortDirection.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);

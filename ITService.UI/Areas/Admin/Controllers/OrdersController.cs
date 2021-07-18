@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITService.Domain;
+using ITService.Domain.Enums;
+using ITService.Domain.Query.Order;
 using ITService.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 
@@ -23,12 +25,34 @@ namespace ITService.UI.Areas.Admin.Controllers
             _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var items = new List<OrderDto>() { new OrderDto() { Id = Guid.NewGuid(), OrderTotal = 220, PhoneNumber = "321125644", OrderStatus = "Pending", PaymentStatus = "Pending", OrderDate = DateTime.Now, } };
-            var obj = new OrderPageResult<OrderDto>(items, 5, 5, 5);
-            return View(obj);
+            var query = new SearchOrdersQuery()
+            {
+                OrderBy = "OrderStatus",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = null,
+                SortDirection = SortDirection.ASC
+            };
+
+            var result = await _mediator.QueryAsync(query);
+            return View(result);
         }
-        
+
+        public async Task<IActionResult> Search(string status)
+        {
+            var query = new SearchOrdersQuery()
+            {
+                OrderBy = "OrderStatus",
+                PageNumber = 1,
+                PageSize = 100,
+                SearchPhrase = status,
+                SortDirection = SortDirection.ASC
+            };
+
+            var result = await _mediator.QueryAsync(query);
+            return View("Index", result);
+        }
     }
 }
