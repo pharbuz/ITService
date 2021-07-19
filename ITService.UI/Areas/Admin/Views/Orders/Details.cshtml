@@ -14,6 +14,7 @@
 
 <form method="post">
     <input hidden asp-for="Header.Id" />
+    <input hidden asp-for="Header.OrderStatus" />
     <br />
     <div class="backgroundWhite container">
         <div class="card">
@@ -63,18 +64,18 @@
                                     </div>
                                 </li>
                             </ul>
-                            <input formaction="/Admin/Order/Apply" type="submit" value="elo" class="btn btn-primary form-control" formmethod="post" />
+
                             @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
                             {
                                 <br />
-                                @if (Model.Header.OrderStatus == OrderStatuses.StatusApproved)
+                                @if (Model.Header.OrderStatus == OrderStatuses.StatusApproved && Model.Header.PaymentStatus == OrderStatuses.PaymentStatusApproved)
                                 {
                                     <input asp-action="HandleOrder" type="submit" value="Handle" class="btn btn-primary form-control" formmethod="post" />
 
                                 }
                                 @if (Model.Header.OrderStatus == OrderStatuses.StatusInProcess && Model.Header.PaymentStatus == OrderStatuses.PaymentStatusApproved)
                                 {
-                                    <input formaction="/Admin/Order/Shipment" type="submit" value="Ship the order" onclick="return validateInput()" class="btn btn-primary form-control" formmethod="post" />
+                                    <input asp-action="Shipment" type="submit" value="Ship the order" onclick="return validateInput()" class="btn btn-primary form-control" formmethod="post" />
                                 }
 
                             }
@@ -91,9 +92,9 @@
                                 <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                         data-key="@Stripe.Value.PublishableKey"
                                         data-amount="@orderTotal"
-                                        data-name="SarVol"
+                                        data-name="Service4You"
                                         data-label="Place Order"
-                                        data-description="Get your best supless!!!"
+                                        data-description="Get your parts!!!"
                                         data-locale="auto"
                                         data-allow-remember-me="false"
                                         data-image="https://redseo.pl/wp-content/uploads/2017/12/market.png">
@@ -102,14 +103,15 @@
                                 <script>
                                     document.querySelector(".stripe-button-el").style.display = "none";
                                 </script>
-                                <button asp-area="Customer" asp-controller="ShoppingCart" asp-action="Summary" type="submit" class="btn btn-success form-control" formmethod="post">Pay</button>
+                                <button asp-area="Admin" asp-controller="Orders" asp-action="Summary" type="submit" class="btn btn-success form-control" formmethod="post">Pay</button>
 
                             }
                             <div style="margin-top:20px;"></div>
 
-                            @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus != OrderStatuses.StatusRefunded && Model.Header.OrderStatus != OrderStatuses.StatusCancelled)
+                            @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus != OrderStatuses.StatusRefunded && Model.Header.OrderStatus != OrderStatuses.StatusCancelled && Model.Header.PaymentStatus!=OrderStatuses.PaymentStatusPending && Model.Header.PaymentStatus != OrderStatuses.PaymentStatusRejected)
                             {
-                                <a class="btn btn-outline-primary form-control" asp-action="Cancel" asp-route-id="@Model.Header.Id">Cancel</a>
+                                <input asp-action="Cancel" type="submit" value="Cancel" class="btn btn-primary form-control" formmethod="post" />
+
                             }
 
 
@@ -118,9 +120,9 @@
                         <div class="col-12 col-lg-6 offset-lg-1 pb-4">
 
                             <div class="row my-1">
-                                <div class="col-3">Street adress</div>
+                                <div class="col-3">Adress</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.Street" type="text" class="form-control" />
                                     }
@@ -133,7 +135,7 @@
                             <div class="row my-1">
                                 <div class="col-3">City</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.City" type="text" class="form-control" />
                                     }
@@ -144,9 +146,9 @@
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <div class="col-3">Phone number</div>
+                                <div class="col-3">Phone </div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    @if ((User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole)) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.PhoneNumber" type="text" class="form-control" />
                                     }
@@ -161,7 +163,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Postal code</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole))
+                                    @if ((User.IsInRole(Roles.AdminUserRole) || User.IsInRole(Roles.EmployeeUserRole)) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.PostalCode" type="text" class="form-control" />
                                     }
@@ -174,20 +176,13 @@
                             <div class="row my-1">
                                 <div class="col-3">Email adress</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
-                                    {
-                                        <input asp-for="Header.User.Email" type="text" class="form-control" />
-                                    }
-                                    else
-                                    {
-                                        <input readonly asp-for="Header.User.Email" type="text" class="form-control" />
-                                    }
+                                    <input readonly asp-for="Header.User.Email" type="text" class="form-control" />
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <div class="col-3">Tracking number</div>
+                                <div class="col-3">Tracking num.</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
                                     }
@@ -200,7 +195,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Carrier</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole))
+                                    @if (User.IsInRole(Roles.EmployeeUserRole) || User.IsInRole(Roles.AdminUserRole) && Model.Header.OrderStatus == OrderStatuses.StatusInProcess)
                                     {
                                         <input asp-for="Header.Carrier" id="carrier" type="text" class="form-control" />
                                     }
@@ -240,7 +235,7 @@
                                     <div class="col-9">
                                         <input value="@Model.Header.PaymentDueDate.ToShortDateString()" readonly type="text" class="form-control" />
                                     </div>
-                                    <div class="col-3">payment date</div>
+                                    <div class="col-3">Payment date</div>
                                     <div class="col-9">
                                         <input value="@Model.Header.PaymentDate.ToShortDateString()" readonly id="paymentDate" type="text" class="form-control" />
                                     </div>
@@ -268,6 +263,10 @@
 
     <script>
         function validateInput() {
+            var trackingNumber = document.querySelector("#trackingNumber").value;
+            var carrier = document.querySelector("#carrier").value;
+            var trackingNumber = document.querySelector("#trackingNumber").value;
+            var carrier = document.querySelector("#carrier").value;
             var trackingNumber = document.querySelector("#trackingNumber").value;
             var carrier = document.querySelector("#carrier").value;
             if (trackingNumber.toString() == "") {

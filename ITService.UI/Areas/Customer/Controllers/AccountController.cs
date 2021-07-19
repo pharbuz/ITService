@@ -42,9 +42,10 @@ namespace ITService.UI.Areas.Customer.Controllers
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
+                return View(command);
             }
 
-            return View();
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
 
         public async Task<IActionResult> ChangeDetails()
@@ -62,9 +63,10 @@ namespace ITService.UI.Areas.Customer.Controllers
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
+                return View(command);
             }
 
-            return View();
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
     }
 }

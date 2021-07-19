@@ -9,12 +9,13 @@ namespace ITService.Domain.Utilities
     public static class OrderStatuses
     {
 
-        public const string StatusPending = "Waiting";
-        public const string StatusApproved = "Approved"; 
+        public const string StatusPending = "Pending";
+        public const string StatusApproved = "Approved";
+        public const string StatusInProcess = "InProcess";
         public const string StatusShipped = "Shipped";
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
-        public const string StatusInProcess = "Process";
+        public const string StatusFinished = "Finished";
 
         public const string PaymentStatusPending = "Waiting";
         public const string PaymentStatusApproved = "Approved";

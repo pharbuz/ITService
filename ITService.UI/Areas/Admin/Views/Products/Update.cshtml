@@ -3,10 +3,10 @@
     ViewData["Title"] = "Add product";
 
 }
-
-<form method="post" class="text-danger" enctype="multipart/form-data" asp-area="Admin" asp-controller="Products" asp-action="Update">
+<div style="margin-top:20px;"></div>
+<form method="post"  enctype="multipart/form-data" asp-area="Admin" asp-controller="Products" asp-action="Update">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row p-3 border">
+    <div class="row p-3 border" style="margin-top:20px;">
         @Html.HiddenFor(m => m.Product.Id)
         <div class="col-12 border-bottom">
             <h2 class="text-primary">@ViewData["Title"]</h2>

@@ -91,7 +91,10 @@ namespace ITService.UI.Areas.Admin.Controllers
 
             var result = await _mediator.QueryAsync(query);
 
-            return View(result);
+            var serviceCommand = new EditServiceCommand() { Name=result.Name, Id=result.Id, Description=result.Description, EstimatedServicePrice=result.EstimatedServicePrice, Image=result.Image };
+
+
+            return View(serviceCommand);
         }
 
         [HttpPost]

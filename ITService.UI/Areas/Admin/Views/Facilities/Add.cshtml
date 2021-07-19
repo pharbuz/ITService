@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add facility";
 
 }
-
+<div style="margin-top:20px;"></div>
 <form method="post" asp-action="Add" asp-controller="Facilities" asp-area="Admin">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row p-3 border">
@@ -30,17 +30,7 @@
                     <span asp-validation-for="StreetAdress" class="text-danger">
                     </span>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="StreetAdress"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="StreetAdress" class="form-control" />
-                    <span asp-validation-for="StreetAdress" class="text-danger">
-                    </span>
-                </div>
-            </div>
+            </div>      
             <div class="form-group row">
                 <div class="col-4">
                     <label asp-for="City"></label>
@@ -76,7 +66,7 @@
                     <label asp-for="OpenedSaturday"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="OpenedSaturday" type="number" class="form-control" />
+                    <input asp-for="OpenedSaturday" type="text" class="form-control" />
                     <span asp-validation-for="OpenedSaturday" class="text-danger">
                     </span>
                 </div>
@@ -86,7 +76,7 @@
                     <label asp-for="OpenedWeek"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="OpenedWeek" type="number" class="form-control" />
+                    <input asp-for="OpenedWeek" type="text" class="form-control" />
                     <span asp-validation-for="OpenedWeek" class="text-danger">
                     </span>
                 </div>

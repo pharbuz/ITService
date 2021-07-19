@@ -238,7 +238,17 @@ namespace ITService.Infrastructure
             });
 
             OnModelCreatingPartial(modelBuilder);
+
+
+            var firstRole = new Role() { Id = Guid.NewGuid(), Name = "Admin" };
+            var secondRole = new Role() { Id = Guid.NewGuid(), Name = "Employee" };
+            var thirdRole = new Role() { Id = Guid.NewGuid(), Name = "Individual Customer" };
+
+
+            modelBuilder.Entity<Role>().HasData(firstRole, secondRole, thirdRole);
         }
+
+     
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

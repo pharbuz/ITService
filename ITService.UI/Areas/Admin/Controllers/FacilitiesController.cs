@@ -72,7 +72,11 @@ namespace ITService.UI.Areas.Admin.Controllers
 
             var result = await _mediator.QueryAsync(query);
 
-            return View(result);
+            var facilitiyCommand = new EditFacilityCommand() { Name = result.Name, Id = result.Id,  City=result.City, 
+                MapUrl=result.MapUrl, OpenedSaturday=result.OpenedSaturday, 
+                OpenedWeek=result.OpenedWeek, PhoneNumber=result.PhoneNumber, PostalCode=result.PostalCode, StreetAdress=result.StreetAdress};
+
+            return View(facilitiyCommand);
         }
 
         [HttpPost]

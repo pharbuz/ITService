@@ -86,7 +86,7 @@ namespace ITService.UI
 
             services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
 
-            var connectionString = Configuration.GetConnectionString("CrmDatabase");
+            var connectionString = Configuration.GetConnectionString("ItService");
             services.AddDbContext<ITServiceDBContext>(options =>
             {
                 options.UseSqlServer(connectionString);

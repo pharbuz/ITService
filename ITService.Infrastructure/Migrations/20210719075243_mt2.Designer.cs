@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITService.Infrastructure.Migrations
 {
     [DbContext(typeof(ITServiceDBContext))]
-    [Migration("20210718195150_MapUrl")]
-    partial class MapUrl
+    [Migration("20210719075243_mt2")]
+    partial class mt2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace ITService.Infrastructure.Migrations
             modelBuilder
                 .HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ITService.Domain.Entities.Category", b =>
@@ -236,6 +236,23 @@ namespace ITService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("31f90867-cf63-491f-86dc-68a3968c62d9"),
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("42699092-fef8-4510-8c74-338c930be793"),
+                            Name = "Employee"
+                        },
+                        new
+                        {
+                            Id = new Guid("afcd1111-6907-43e7-b01b-eb4101ee59e5"),
+                            Name = "Individual Customer"
+                        });
                 });
 
             modelBuilder.Entity("ITService.Domain.Entities.Service", b =>

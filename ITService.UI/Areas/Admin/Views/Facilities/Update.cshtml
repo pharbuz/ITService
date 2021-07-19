@@ -1,9 +1,9 @@
-﻿@model ITService.Domain.Query.Dto.FacilityDto
+﻿@model ITService.Domain.Command.Facility.EditFacilityCommand
 @{
     ViewData["Title"] = "Edit facility";
 
 }
-
+<div style="margin-top:20px;"></div>
 <form method="post" asp-action="Update" asp-controller="Facilities">
     <input asp-for="Id" hidden />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -32,16 +32,7 @@
                     </span>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="StreetAdress"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="StreetAdress" class="form-control" />
-                    <span asp-validation-for="StreetAdress" class="text-danger">
-                    </span>
-                </div>
-            </div>
+          
             <div class="form-group row">
                 <div class="col-4">
                     <label asp-for="City"></label>
@@ -67,7 +58,7 @@
                     <label asp-for="PhoneNumber"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="PhoneNumber" type="number" class="form-control" />
+                    <input asp-for="PhoneNumber" type="text" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger">
                     </span>
                 </div>
@@ -77,7 +68,7 @@
                     <label asp-for="OpenedSaturday"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="OpenedSaturday" type="number" class="form-control" />
+                    <input asp-for="OpenedSaturday" type="text" class="form-control" />
                     <span asp-validation-for="OpenedSaturday" class="text-danger">
                     </span>
                 </div>
@@ -87,7 +78,7 @@
                     <label asp-for="OpenedWeek"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="OpenedWeek" type="number" class="form-control" />
+                    <input asp-for="OpenedWeek" type="text" class="form-control" />
                     <span asp-validation-for="OpenedWeek" class="text-danger">
                     </span>
                 </div>

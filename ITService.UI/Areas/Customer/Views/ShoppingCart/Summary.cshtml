@@ -19,7 +19,7 @@
                         <span style="font-size:25px;">Summary</span>
                     </div>
                     <div class="col-6" style="text-align:center; padding:12px;">
-                        <a asp-area="Customer" asp-action="Index" asp-controller="ShoppingCart" style="padding:8px; " class="btn btn-outline-info btn-sm btn-outline-success form-control">Go to cart</a>
+                        <a asp-area="Customer" asp-action="Index" asp-controller="ShoppingCart" style="padding:8px; " class="btn btn-outline-secondary form-control">Go to shopping cart</a>
                     </div>
                 </div>
                 <div style="background-color:black; height:4px;">
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="row my-1">
                                     <div class="col-3">
-                                        <label>Street Address</label>
+                                        <label>Address</label>
                                     </div>
                                     <div class="col-9">
                                         <input asp-for="Order.Street" type="text" class="form-control" value="@Model.User.Street" />
@@ -113,7 +113,7 @@
                             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                     data-key="@Stripe.Value.PublishableKey"
                                     data-amount="@orderTotal"
-                                    data-name="SarVol"
+                                    data-name="Service4Now"
                                     data-label="Place Order"
                                     data-description="Get your best elements!!!"
                                     data-locale="auto"

@@ -180,7 +180,7 @@ namespace ITService.UI.Areas.Customer.Controllers
                 OrderStatus = null,
                 PaymentStatus = null,
                 PaymentDate = DateTime.Now,
-                PaymentDueDate = DateTime.Now.AddDays(7),
+                PaymentDueDate = DateTime.Now.AddDays(3),
                 TransactionId = null,
                 Street = currentUser.Street,
                 City = currentUser.City,
@@ -200,6 +200,9 @@ namespace ITService.UI.Areas.Customer.Controllers
                 var service = new ChargeService();
                 Charge charge = service.Create(options);
 
+                command.PaymentStatus = OrderStatuses.PaymentStatusPending;
+                command.OrderStatus = OrderStatuses.StatusPending;
+
                 if (charge.Id == null)
                 {
                     command.PaymentStatus = OrderStatuses.PaymentStatusRejected;
@@ -209,7 +212,6 @@ namespace ITService.UI.Areas.Customer.Controllers
                 {
                     command.TransactionId = charge.Id;
                 }
-
                 if (charge.Status.ToLower() == "succeeded")
                 {
                     command.PaymentStatus = OrderStatuses.PaymentStatusApproved;
@@ -241,7 +243,7 @@ namespace ITService.UI.Areas.Customer.Controllers
 
         public async Task<IActionResult> OrderConfirm(Guid id)
         {
-            return View();
+            return View(id);
         }
     }
 }

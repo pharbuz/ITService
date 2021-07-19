@@ -79,14 +79,46 @@ namespace ITService.UI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> Add(AddUserViewModel model)
         {
-            var result = await _mediator.CommandAsync(model.User);
+            if(model.User.RoleId==null)
+            {
+                var roles = await _mediator.QueryAsync(new SearchRolesQuery()
+                {
+                    PageNumber = 1,
+                    PageSize = 10,
+                    OrderBy = "Name",
+                    SortDirection = SortDirection.DESC
+                });
 
+                var roleItems = new List<SelectListItem>();
+
+                foreach (var roleItem in roles.Items)
+                {
+                    roleItems.Add(new SelectListItem(roleItem.Name, roleItem.Id.ToString()));
+                }
+                model.Roles = roleItems;
+                return View();
+            }
+            var result = await _mediator.CommandAsync(model.User);
             if (result.IsFailure)
             {
                 ModelState.PopulateValidation(result.Errors);
+                var roles = await _mediator.QueryAsync(new SearchRolesQuery()
+                {
+                    PageNumber = 1,
+                    PageSize = 10,
+                    OrderBy = "Name",
+                    SortDirection = SortDirection.DESC
+                });
+
+                var roleItems = new List<SelectListItem>();
+
+                foreach (var roleItem in roles.Items)
+                {
+                    roleItems.Add(new SelectListItem(roleItem.Name, roleItem.Id.ToString()));
+                }
+                model.Roles = roleItems;
                 return View();
             }
-
             return RedirectToAction("Index", "Users", new { area = "Admin" });
         }
 

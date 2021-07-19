@@ -7,7 +7,7 @@
 }
 
 
-<div class="row">
+<div class="row" style="margin-top:20px;">
     <div class="col-8">
         <h2 class="text-primary">Services</h2>
     </div>
@@ -17,7 +17,7 @@
 </div>
 
 <br />
-<div class="row">
+<div class="row" >
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -42,7 +42,7 @@
                     @item.Name
                 </td>
                 <td>
-                    @item.EstimatedServicePrice zł
+                    @item.EstimatedServicePrice $
                 </td>
                 <td>
                     <a class="btn btn-click text-secondary btn-outline-secondary " asp-action="Update" asp-route-Id="@item.Id">Edit</a>

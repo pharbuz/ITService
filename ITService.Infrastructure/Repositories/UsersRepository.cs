@@ -144,6 +144,10 @@ namespace ITService.Infrastructure.Repositories
             {
                 return null;
             }
+            if(userToBeVerified.LockoutEnd>DateTime.Now)
+            {
+                return null;
+            }
             var result = _hasher.VerifyHashedPassword(userToBeVerified, userToBeVerified.Password, password);
             if (result == PasswordVerificationResult.Failed)
             {

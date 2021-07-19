@@ -5,7 +5,7 @@ namespace ITService.Domain.Query.Dto.Pagination.PageResults
 {
     public class OrderPageResult<T>
     {
-        public List<T> Items { get; }
+        public List<T> Items { get; set; }
         public int TotalPages { get; }
         public int ItemsFrom { get; }
         public int ItemsTo { get; }

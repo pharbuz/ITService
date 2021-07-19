@@ -23,6 +23,7 @@ namespace ITService.Domain.Command.User
             }
 
             var token = await _unitOfWork.UsersRepository.LoginAsync(command.Login, command.Password, command.RememberMe);
+
             if (string.IsNullOrEmpty(token))
             {
                 return Result.Fail("Invalid username or password.");

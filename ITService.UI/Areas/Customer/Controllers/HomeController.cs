@@ -20,22 +20,26 @@ using Microsoft.EntityFrameworkCore;
 namespace ITService.UI.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize]
-    [ServiceFilter(typeof(JwtAuthFilter))]
+
+   
     public class HomeController : Controller
     {
         private readonly IMediator _mediator;
+
 
         public HomeController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
+
+        [ServiceFilter(typeof(JwtAuthFilter))]
         private Guid GetCurrentUserId()
         {
             return Guid.Parse(HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
+
 
         public async Task<IActionResult> Index()
         {
@@ -51,6 +55,8 @@ namespace ITService.UI.Areas.Customer.Controllers
             return View(result);
         }
 
+
+        
         public async Task<IActionResult> Details(Guid productId)
         {
             var product = await _mediator.QueryAsync(new GetProductQuery(productId));
@@ -58,7 +64,8 @@ namespace ITService.UI.Areas.Customer.Controllers
             {
                 Product = product,
                 ProductId = productId,
-                UserId = GetCurrentUserId()
+                Count = 1,
+            
             };
             return View(command);
         }
@@ -78,8 +85,17 @@ namespace ITService.UI.Areas.Customer.Controllers
             return View("Index", result);
         }
 
+
+        [ServiceFilter(typeof(JwtAuthFilter))]
         public async Task<IActionResult> AddToShoppingCart(Guid productId, int count)
         {
+      
+
+
+            if (HttpContext.User.Claims.FirstOrDefault()==null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
             var searchQuery = new SearchShoppingCartsQuery()
             {
                 OrderBy = "Count",

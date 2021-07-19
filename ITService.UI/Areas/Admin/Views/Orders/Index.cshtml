@@ -12,24 +12,33 @@
 <div class="border p-3">
     <div class="d-flex justify-content-between mb-3">
         <div class="p-2">
-            <h2 class="text-primary">Zamówienia</h2>
+            <h2 class="text-primary">Orders</h2>
         </div>
-        <div class="p-2">
+        <div class="p-0">
             <ul class="list-group list-group-horizontal-sm">
-                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Process">
-                    <li class="list-group-item">Order inprocess</li>
-                </a>
-                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Waiting">
-                    <li class="list-group-item ">Order pending</li>
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Pending">
+                    <li class="list-group-item ">Pending</li>
                 </a>
                 <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Approved">
-                    <li class="list-group-item ">Order completed</li>
+                    <li class="list-group-item ">Approved</li>
+                </a>
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="InProcess">
+                    <li class="list-group-item ">In process</li>
+                </a>
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Shipped">
+                    <li class="list-group-item ">Shipped</li>
                 </a>
                 <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Refunded">
-                    <li class="list-group-item ">Order rejected/refunded</li>
+                    <li class="list-group-item ">Refunded</li>
+                </a>
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Cancelled">
+                    <li class="list-group-item ">Cancelled</li>
+                </a>
+                <a style="text-decoration:none" asp-action="Search" asp-controller="Orders" asp-action="Index" asp-route-status="Finished">
+                    <li class="list-group-item ">Finished</li>
                 </a>
                 <a style="text-decoration:none" asp-action="Index" asp-controller="Orders" asp-action="Index">
-                    <li class="list-group-item">All orders</li>
+                    <li class="list-group-item">All</li>
                 </a>
             </ul>
         </div>
@@ -68,7 +77,7 @@
                         @item.OrderDate
                     </td>
                     <td>
-                        @item.OrderTotal zł
+                        @item.OrderTotal $
                     </td>
                     <td>
                         <a class="btn btn-click text-secondary btn-outline-secondary " asp-action="Details" asp-route-Id="@item.Id">Details</a>

@@ -14,11 +14,12 @@
                 <div class="card">
                     <div class="row container">
                         <div class="col-6" style="padding:12px;">
-                            <i class="fa fa-shopping-cart" style="padding: 8px; font-size:25px"></i> &nbsp;
+                            <i class="fas fa-shopping-basket" style="padding: 8px; font-size:25px"></i> &nbsp;
+                        
                             <span style="font-size:25px;">Your card</span>
                         </div>
                         <div class="col-6" style="text-align:center; padding:12px;">
-                            <a asp-area="Customer" asp-controller="Home" asp-action="Index"  class="btn btn-outline-secondary form-control">Go back to shopping</a>
+                            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary form-control">Go back to shopping</a>
                         </div>
                     </div>
                     <div style="background-color:black; height:4px;">
@@ -35,7 +36,7 @@
                                 </div>
                                 <div class="col-12 text-sm-center col-lg-6 text-lg-left">
                                     <h5><strong>@item.Product.Name</strong></h5>
-                                   
+
                                 </div>
                                 <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
                                     <div class="col-4 text-md-right" style="padding-top:5px;">
@@ -43,12 +44,12 @@
                                     </div>
                                     <div class="col-6 col-sm-4 col-lg-6">
                                         <div class="float-right mx-1">
-                                            <a asp-action="More" asp-route-id="@item.Id"  class="btn btn-outline-primary">
+                                            <a asp-action="More" asp-route-id="@item.Id" class="btn btn-outline-primary">
                                                 <i class="fas fa-plus"></i>
                                             </a>
                                         </div>
                                         <div class="float-right mx-1">
-                                            <a asp-action="Less" asp-route-id="@item.Id"  class="btn btn-outline-danger">
+                                            <a asp-action="Less" asp-route-id="@item.Id" class="btn btn-outline-danger">
                                                 <i class="fas fa-minus"></i>
                                             </a>
                                         </div>
@@ -83,7 +84,7 @@
                             <div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
 
                                 <a asp-action="Summary" asp-area="Customer" asp-controller="ShoppingCart" class="btn btn-outline-primary form-control">Summary</a>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,7 +93,11 @@
     }
     else
     {
-        <div style="text-align:center; border:1px solid black" class=" border-1">Zero products in shopping cart</div>
+        
+
+        <div style="border:1px solid black">
+            <h1 style="text-align:center;padding:10px; color:gray;  text-transform:uppercase">No products in shopping cart</h1>
+        </div>
 
     }
 

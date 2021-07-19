@@ -3,28 +3,30 @@
 @{
     ViewData["Title"] = "Facilities";
 }
-<h1 style="text-align:center;margin-bottom:40px;">Our facilities</h1>
+<div style="border:1px solid black; margin:10px;">
+    <h1 style="text-align:center;padding:10px; color:gray;  text-transform:uppercase">Facilities</h1>
+</div>
 
 <div class="row pb-3 backgroundWhite">
     @foreach (var facility in Model.Items)
     {
-        <div class="col-lg-12 col-md-12 col-sm-12 container rounded ">
+        <div class="col-lg-12 col-md-12 col-sm-12 container  ">
             <div class="row">
 
-                <div class="col-12" style="border:1px solid #008cba; border-radius: 2px;">
+                <div class="col-12" >
                     <div class="card" style="border:0px; padding-left:10px;">
                         <div style="text-align:center">
                             <p class="card-title "><b style="color:#2c3e50;font-size:1.8rem;">@facility.Name</b></p>
                         </div>
-                        <h4 style="font-size:1.5rem">Opened:</h4>
+                        <h4 style="font-size:1.5rem">OPENED:</h4>
                         <div style="text-align:left; ">
-                            <p class="card-title text-dark" style="font-size: 1.2rem;">Monday – friday: <b> @facility.OpenedSaturday</b></p>
-                            <p class="card-title text-dark" style="font-size: 1.2rem;">Saturday: <b>@facility.OpenedWeek</b></p>
+                            <p class="card-title text-dark" style="font-size: 1.2rem;">monday – friday: <b> @facility.OpenedSaturday</b></p>
+                            <p class="card-title text-dark" style="font-size: 1.2rem;">saturday: <b>@facility.OpenedWeek</b></p>
                         </div>
-                        <h4 style="font-size:1.5rem">Adress:</h4>
+                        <h4 style="font-size:1.5rem">ADRESS:</h4>
                         <div>
-                            <p class="card-title text-dark" style="font-size: 1.2rem;">Street: <b>@facility.StreetAdress</b></p>
-                            <p class="card-title text-dark" style="font-size: 1.2rem;">Postal code,city: <b>@facility.PostalCode @facility.City</b></p>
+                            <p class="card-title text-dark" style="font-size: 1.2rem;">street: <b>@facility.StreetAdress</b></p>
+                            <p class="card-title text-dark" style="font-size: 1.2rem;">postal code,city: <b>@facility.PostalCode @facility.City</b></p>
                         </div>
                     </div>
                 </div>

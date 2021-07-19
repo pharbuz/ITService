@@ -3,11 +3,11 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div style="margin-top:20px;"></div>
 <form method="post">
     <input hidden asp-for="ProductId" />
     <div class="container ">
-        <div class="card" style="background-color:azure;">
+        <div class="card" >
             <div class=" row container" style="margin-top:20px">
                 <div class="col-8 col-md-8">
                     <h1 class="text-center">@Model.Product.Name</h1>
